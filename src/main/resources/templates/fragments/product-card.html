@@ -42,7 +42,7 @@
 
             <!-- Actions -->
             <div class="d-flex flex-column gap-2 mt-2">
-                <form th:action="@{/cart/add}" method="POST" class="w-100">
+                <form action="/cart/add" method="POST" class="w-100">
                     <input type="hidden" name="productId" th:value="${product.id}">
                     <input type="hidden" name="quantity" value="1">
                     <button type="submit" class="omni-btn-add-cart">

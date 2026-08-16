@@ -42,7 +42,11 @@ public class SecurityConfig {
                 // Disable CSRF on API and H2 console endpoints for seamless AJAX/Fetch tool interaction
                 .ignoringRequestMatchers(
                     new AntPathRequestMatcher("/api/**"),
-                    new AntPathRequestMatcher("/profile/email/**"),
+                    new AntPathRequestMatcher("/cart/**"),
+                    new AntPathRequestMatcher("/compare/**"),
+                    new AntPathRequestMatcher("/wishlist/**"),
+                    new AntPathRequestMatcher("/products/**/reviews"),
+                    new AntPathRequestMatcher("/profile/**"),
                     new AntPathRequestMatcher("/h2-console/**")
                 )
             )
