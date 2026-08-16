@@ -1,0 +1,139 @@
+/* =========================================================
+   OmniMart AI - Interactive Live Canvas Wallpaper Styling
+   ========================================================= */
+
+#live-wallpaper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(circle at 50% 50%, #080d1a 0%, #030712 65%, #000000 100%);
+    transition: opacity 0.5s ease;
+}
+
+/* Semi-transparent dark glass container styling for content over wallpaper */
+body {
+    background-color: transparent !important;
+    min-height: 100vh;
+    color: #f1f5f9;
+}
+
+.omni-content-wrapper {
+    position: relative;
+    z-index: 1;
+}
+
+/* Enhancing existing UI cards with futuristic translucent backdrop blur */
+.card, .omni-card {
+    background: rgba(15, 23, 42, 0.78) !important;
+    backdrop-filter: blur(12px) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
+    border: 1px solid rgba(148, 163, 184, 0.15) !important;
+    color: #f8fafc;
+}
+
+.omni-card:hover {
+    background: rgba(26, 36, 64, 0.88) !important;
+    border-color: rgba(108, 124, 255, 0.45) !important;
+    box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.6), 0 0 20px rgba(108, 124, 255, 0.25) !important;
+}
+
+.omni-card-img-wrap {
+    background: rgba(11, 17, 32, 0.6) !important;
+}
+
+.omni-card-title, .omni-card-brand {
+    color: #f8fafc !important;
+}
+
+.text-dark {
+    color: #f8fafc !important;
+}
+
+.bg-light, .bg-white {
+    background: rgba(15, 23, 42, 0.72) !important;
+    color: #f8fafc !important;
+}
+
+/* Matrix Table & Comparison High Contrast Styling */
+.table, .table-bordered {
+    color: #f8fafc !important;
+    border-color: rgba(148, 163, 184, 0.2) !important;
+    background-color: transparent !important;
+}
+
+.table th, .table td {
+    background-color: rgba(15, 23, 42, 0.75) !important;
+    color: #f1f5f9 !important;
+    border-color: rgba(148, 163, 184, 0.2) !important;
+}
+
+.table thead th {
+    background-color: rgba(15, 23, 42, 0.95) !important;
+    color: #f8fafc !important;
+    border-bottom: 2px solid rgba(108, 124, 255, 0.4) !important;
+}
+
+.table tbody th {
+    background-color: rgba(30, 41, 59, 0.85) !important;
+    color: #93c5fd !important;
+    font-weight: 700 !important;
+}
+
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+    background-color: rgba(51, 65, 85, 0.8) !important;
+    color: #ffffff !important;
+}
+
+.omni-compare-table span {
+    color: #f8fafc !important;
+}
+
+/* Mode Indicators & Wallpaper Control Overlay */
+.wallpaper-mode-pill {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 100;
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(108, 124, 255, 0.3);
+    backdrop-filter: blur(8px);
+    border-radius: 30px;
+    padding: 6px 14px;
+    font-size: 0.75rem;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+}
+
+.wallpaper-mode-pill:hover {
+    border-color: #6C7CFF;
+    color: #f8fafc;
+    box-shadow: 0 0 15px rgba(108, 124, 255, 0.4);
+}
+
+.wallpaper-pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #6C7CFF;
+    box-shadow: 0 0 10px #6C7CFF;
+    animation: livePulse 2s infinite ease-in-out;
+}
+
+@keyframes livePulse {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.4); opacity: 1; box-shadow: 0 0 16px #A66CFF; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #live-wallpaper {
+        animation: none !important;
+    }
+}

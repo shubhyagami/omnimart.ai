@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('My Account & Preferences | OmniMart AI')}"></head>
+<body class="bg-light">
+<header th:replace="~{fragments/header :: navbar}"></header>
+
+<main class="container py-5">
+    <!-- Header Greeting Banner -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-dark text-white position-relative overflow-hidden">
+        <div class="position-absolute end-0 top-0 bottom-0 opacity-10 d-none d-md-flex align-items-center pe-4">
+            <i class="fa-solid fa-cart-shopping" style="font-size: 14rem; color: #f59e0b;"></i>
+        </div>
+        <div class="d-flex flex-wrap align-items-center justify-content-between position-relative z-1">
+            <div class="d-flex align-items-center gap-3">
+                <div class="rounded-circle bg-warning text-dark d-flex align-items-center justify-content-center fw-bold fs-2 shadow" style="width: 72px; height: 72px;">
+                    <span th:text="${#strings.substring(user.fullName, 0, 1)}">R</span>
+                </div>
+                <div>
+                    <div class="d-flex align-items-center gap-2">
+                        <h2 class="fw-bold mb-0 text-white" th:text="${user.fullName}">Rahul Sharma</h2>
+                        <span class="badge bg-warning text-dark"><i class="fa-solid fa-shield-check me-1"></i>Verified Customer</span>
+                    </div>
+                    <p class="text-secondary mb-0 small" th:text="${user.email}">user@omnimart.com</p>
+                </div>
+            </div>
+            <div class="mt-3 mt-md-0 d-flex gap-2">
+                <a th:href="@{/orders}" class="btn btn-outline-light btn-sm rounded-pill px-3">
+                    <i class="fa-solid fa-box me-1 text-warning"></i> My Orders (<span th:text="${#lists.size(orders)}">5</span>)
+                </a>
+                <a th:href="@{/cart}" class="btn btn-warning btn-sm rounded-pill px-3 fw-bold">
+                    <i class="fa-solid fa-cart-shopping me-1"></i> View Cart
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Alerts -->
+    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show rounded-3 py-2 mb-4" role="alert">
+        <i class="fa-solid fa-circle-check me-2"></i><span th:text="${successMessage}">Changes saved successfully.</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show rounded-3 py-2 mb-4" role="alert">
+        <i class="fa-solid fa-circle-exclamation me-2"></i><span th:text="${errorMessage}">Error occurred.</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <div class="row g-4">
+        <!-- Sidebar Navigation Tabs -->
+        <div class="col-lg-3">
+            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white sticky-top" style="top: 20px;">
+                <div class="nav flex-column nav-pills" id="profileTab" role="tablist">
+                    <button class="nav-link text-start py-3 px-3 rounded-3 mb-1" th:classappend="${activeTab == 'info' ? 'active bg-warning text-dark fw-bold' : 'text-secondary'}" id="info-tab" data-bs-toggle="pill" data-bs-target="#info-pane" type="button">
+                        <i class="fa-solid fa-user me-2"></i> Personal Info
+                    </button>
+                    <button class="nav-link text-start py-3 px-3 rounded-3 mb-1" th:classappend="${activeTab == 'security' ? 'active bg-warning text-dark fw-bold' : 'text-secondary'}" id="security-tab" data-bs-toggle="pill" data-bs-target="#security-pane" type="button">
+                        <i class="fa-solid fa-lock me-2"></i> Security & Password
+                    </button>
+                    <button class="nav-link text-start py-3 px-3 rounded-3 mb-1" th:classappend="${activeTab == 'addresses' ? 'active bg-warning text-dark fw-bold' : 'text-secondary'}" id="addresses-tab" data-bs-toggle="pill" data-bs-target="#addresses-pane" type="button">
+                        <i class="fa-solid fa-location-dot me-2"></i> Saved Addresses
+                    </button>
+                    <button class="nav-link text-start py-3 px-3 rounded-3 mb-1" th:classappend="${activeTab == 'preferences' ? 'active bg-warning text-dark fw-bold' : 'text-secondary'}" id="preferences-tab" data-bs-toggle="pill" data-bs-target="#preferences-pane" type="button">
+                        <i class="fa-solid fa-brain me-2 text-primary"></i> AI Shopping Preferences
+                    </button>
+                    <button class="nav-link text-start py-3 px-3 rounded-3 mb-1" th:classappend="${activeTab == 'orders' ? 'active bg-warning text-dark fw-bold' : 'text-secondary'}" id="orders-tab" data-bs-toggle="pill" data-bs-target="#orders-pane" type="button">
+                        <i class="fa-solid fa-receipt me-2"></i> Order History & Receipts
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Tab Content Panes -->
+        <div class="col-lg-9">
+            <div class="tab-content" id="profileTabContent">
+
+                <!-- 1. PERSONAL INFO PANE -->
+                <div class="tab-pane fade" th:classappend="${activeTab == 'info' ? 'show active' : ''}" id="info-pane">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
+                        <h4 class="fw-bold mb-4 text-dark"><i class="fa-solid fa-id-card text-warning me-2"></i>Personal Details</h4>
+                        
+                        <form th:action="@{/profile/update-info}" method="POST">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-muted">Full Name</label>
+                                    <input type="text" name="fullName" class="form-control" th:value="${user.fullName}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-muted">Phone Number</label>
+                                    <input type="text" name="phone" class="form-control" th:value="${user.phone}" placeholder="+91 98000 00000">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label small fw-bold text-muted">Email Address</label>
+                                    <div class="input-group">
+                                        <input type="email" class="form-control bg-light" th:value="${user.email}" readonly>
+                                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#changeEmailModal">
+                                            <i class="fa-solid fa-envelope-circle-check me-1"></i> Change Email (with OTP)
+                                        </button>
+                                    </div>
+                                    <small class="text-muted">Changing your email requires real-time 6-digit OTP verification via Brevo.</small>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-end">
+                                <button type="submit" class="btn btn-warning fw-bold px-4">Save Personal Info</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- 2. SECURITY & PASSWORD PANE -->
+                <div class="tab-pane fade" th:classappend="${activeTab == 'security' ? 'show active' : ''}" id="security-pane">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
+                        <h4 class="fw-bold mb-4 text-dark"><i class="fa-solid fa-shield-halved text-warning me-2"></i>Security & Password</h4>
+                        
+                        <form th:action="@{/profile/change-password}" method="POST">
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <label class="form-label small fw-bold text-muted">Current Password</label>
+                                    <input type="password" name="currentPassword" class="form-control" placeholder="••••••••" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-muted">New Password</label>
+                                    <input type="password" name="newPassword" class="form-control" placeholder="Minimum 6 characters" minlength="6" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-muted">Confirm New Password</label>
+                                    <input type="password" name="confirmPassword" class="form-control" placeholder="Re-type new password" minlength="6" required>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-end">
+                                <button type="submit" class="btn btn-warning fw-bold px-4">Update Password</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- 3. SAVED ADDRESSES PANE -->
+                <div class="tab-pane fade" th:classappend="${activeTab == 'addresses' ? 'show active' : ''}" id="addresses-pane">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4 class="fw-bold mb-0 text-dark"><i class="fa-solid fa-map-location-dot text-warning me-2"></i>Saved Addresses</h4>
+                            <button type="button" class="btn btn-warning btn-sm fw-bold" data-bs-toggle="modal" data-bs-target="#addAddressModal">
+                                <i class="fa-solid fa-plus me-1"></i> Add New Address
+                            </button>
+                        </div>
+
+                        <div class="row g-3">
+                            <div th:each="addr : ${addresses}" class="col-md-6">
+                                <div class="card h-100 border rounded-3 p-3 position-relative" th:classappend="${addr.isDefault ? 'border-warning bg-warning-subtle bg-opacity-10' : 'bg-light'}">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <strong class="text-dark fs-6" th:text="${addr.fullName}">Rahul Sharma</strong>
+                                        <span th:if="${addr.isDefault}" class="badge bg-warning text-dark">Default</span>
+                                    </div>
+                                    <div class="small text-muted mb-1" th:text="${addr.phone}">+91 99000 10000</div>
+                                    <div class="small text-muted" th:text="${addr.streetAddress}">124 Cyber City</div>
+                                    <div class="small text-muted" th:text="${addr.city + ', ' + addr.state + ' - ' + addr.postalCode}">Gurugram, Haryana - 122002</div>
+                                    <div class="small text-muted mb-3" th:text="${addr.country}">India</div>
+
+                                    <div class="mt-auto d-flex gap-2 pt-2 border-top">
+                                        <form th:if="${!addr.isDefault}" th:action="@{/profile/address/{id}/default(id=${addr.id})}" method="POST">
+                                            <button type="submit" class="btn btn-outline-secondary btn-xs py-1 px-2 small">Set Default</button>
+                                        </form>
+                                        <form th:action="@{/profile/address/{id}/delete(id=${addr.id})}" method="POST" onsubmit="return confirm('Delete this address?');">
+                                            <button type="submit" class="btn btn-outline-danger btn-xs py-1 px-2 small"><i class="fa-solid fa-trash me-1"></i>Delete</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div th:if="${#lists.isEmpty(addresses)}" class="col-12 text-center py-4 text-muted">
+                                <i class="fa-solid fa-location-arrow fs-2 mb-2 text-secondary"></i>
+                                <p class="mb-0">No shipping addresses saved yet.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. AI PREFERENCES PANE -->
+                <div class="tab-pane fade" th:classappend="${activeTab == 'preferences' ? 'show active' : ''}" id="preferences-pane">
+                    <!-- Explicit Shopping Preferences -->
+                    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <h4 class="fw-bold mb-0 text-dark"><i class="fa-solid fa-sliders text-warning me-2"></i>Customize Your Shopping Preferences</h4>
+                            <span class="badge bg-primary">Hyper-Personalization</span>
+                        </div>
+                        <p class="text-muted small mb-4">Configure your shopping tastes and budget bounds so the AI assistant and recommendation feed adapt directly to you.</p>
+
+                        <form th:action="@{/profile/update-preferences}" method="POST">
+                            <!-- Budget Range Inputs -->
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-muted">Min Target Budget (₹)</label>
+                                    <input type="number" name="minBudget" class="form-control" th:value="${preference.minBudget != null ? preference.minBudget : 5000}" step="500">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-muted">Max Target Budget (₹)</label>
+                                    <input type="number" name="maxBudget" class="form-control" th:value="${preference.maxBudget != null ? preference.maxBudget : 150000}" step="1000">
+                                </div>
+                            </div>
+
+                            <!-- Preferred Categories -->
+                            <div class="mb-4">
+                                <label class="form-label small fw-bold text-muted d-block mb-2">Favorite Product Categories</label>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <th:block th:each="cat : ${categories}">
+                                        <input type="checkbox" class="btn-check" name="preferredCategories" th:value="${cat.name}" th:id="'cat_' + ${cat.id}"
+                                               th:checked="${preference.preferredCategories != null and preference.preferredCategories.containsKey(cat.name)}">
+                                        <label class="btn btn-outline-secondary btn-sm rounded-pill" th:for="'cat_' + ${cat.id}" th:text="${cat.name}">Category</label>
+                                    </th:block>
+                                </div>
+                            </div>
+
+                            <!-- Preferred Brands -->
+                            <div class="mb-4">
+                                <label class="form-label small fw-bold text-muted d-block mb-2">Preferred Brands</label>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <th:block th:each="b : ${brands}">
+                                        <input type="checkbox" class="btn-check" name="preferredBrands" th:value="${b.name}" th:id="'brand_' + ${b.id}"
+                                               th:checked="${preference.preferredBrands != null and preference.preferredBrands.containsKey(b.name)}">
+                                        <label class="btn btn-outline-secondary btn-sm rounded-pill" th:for="'brand_' + ${b.id}" th:text="${b.name}">Brand</label>
+                                    </th:block>
+                                </div>
+                            </div>
+
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-warning fw-bold px-4">Update Shopping Model</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Privacy & Telemetry Toggles -->
+                    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+                        <h5 class="fw-bold mb-3"><i class="fa-solid fa-user-shield text-success me-2"></i>Privacy & Data Controls</h5>
+                        <form th:action="@{/profile/preferences}" method="POST">
+                            <div class="form-check form-switch mb-3">
+                                <input class="form-check-input" type="checkbox" role="switch" id="recSwitch" name="recommendationsEnabled" value="true"
+                                       th:checked="${preference.recommendationsEnabled}">
+                                <label class="form-check-label fw-semibold text-dark" for="recSwitch">AI Personalized Feeds</label>
+                                <small class="text-muted d-block">Enable hyper-personalized product feeds on your homepage.</small>
+                            </div>
+
+                            <div class="form-check form-switch mb-3">
+                                <input class="form-check-input" type="checkbox" role="switch" id="trackSwitch" name="behaviorTrackingEnabled" value="true"
+                                       th:checked="${preference.behaviorTrackingEnabled}">
+                                <label class="form-check-label fw-semibold text-dark" for="trackSwitch">Real-Time Telemetry Tracking</label>
+                                <small class="text-muted d-block">Allow behavioral logging of searches & views to refine AI precision.</small>
+                            </div>
+
+                            <div class="form-check form-switch mb-4">
+                                <input class="form-check-input" type="checkbox" role="switch" id="chatSwitch" name="aiChatHistoryEnabled" value="true"
+                                       th:checked="${preference.aiChatHistoryEnabled}">
+                                <label class="form-check-label fw-semibold text-dark" for="chatSwitch">AI Assistant Conversation Memory</label>
+                                <small class="text-muted d-block">Allow AI Shopping Assistant to remember previous query context.</small>
+                            </div>
+
+                            <button type="submit" class="btn btn-outline-dark fw-bold">Save Privacy Toggles</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- 5. ORDER HISTORY & RECEIPTS PANE -->
+                <div class="tab-pane fade" th:classappend="${activeTab == 'orders' ? 'show active' : ''}" id="orders-pane">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4 class="fw-bold mb-0 text-dark"><i class="fa-solid fa-boxes-packing text-warning me-2"></i>Order History & Invoices</h4>
+                            <span class="badge bg-dark" th:text="${#lists.size(orders)} + ' Total Orders'">5 Total Orders</span>
+                        </div>
+
+                        <div class="table-responsive" th:if="${not #lists.isEmpty(orders)}">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr class="small text-muted">
+                                        <th>Order #</th>
+                                        <th>Date</th>
+                                        <th>Items</th>
+                                        <th>Total</th>
+                                        <th>Status</th>
+                                        <th>Tracking & Receipt</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="ord : ${orders}">
+                                        <td>
+                                            <a th:href="@{/orders/{id}(id=${ord.id})}" class="fw-bold text-primary text-decoration-none" th:text="${ord.orderNumber}">ORD-1234</a>
+                                        </td>
+                                        <td class="small text-muted" th:text="${#temporals.format(ord.createdAt, 'dd MMM yyyy')}">16 Aug 2026</td>
+                                        <td class="small" th:text="${#lists.size(ord.items)} + ' item(s)'">2 item(s)</td>
+                                        <td class="fw-bold text-dark" th:text="'₹' + ${#numbers.formatDecimal(ord.finalAmount, 0, 'COMMA', 0, 'POINT')}">₹49,999</td>
+                                        <td>
+                                            <span class="badge bg-success" th:text="${ord.status}">DELIVERED</span>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex gap-1">
+                                                <a th:href="@{/orders/{id}/tracking(id=${ord.id})}" class="btn btn-outline-secondary btn-xs py-1 px-2 small">
+                                                    <i class="fa-solid fa-truck-fast me-1 text-primary"></i> Track
+                                                </a>
+                                                <a th:href="@{/orders/{id}(id=${ord.id})}" class="btn btn-outline-secondary btn-xs py-1 px-2 small">
+                                                    <i class="fa-solid fa-file-invoice me-1 text-warning"></i> Invoice
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div th:if="${#lists.isEmpty(orders)}" class="text-center py-5 text-muted">
+                            <i class="fa-solid fa-box-open fs-1 mb-2 text-secondary"></i>
+                            <h5>No orders yet</h5>
+                            <p class="small">Explore our catalog and find exciting deals today!</p>
+                            <a th:href="@{/products}" class="btn btn-warning fw-bold">Shop Now</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Add Address Modal -->
+<div class="modal fade" id="addAddressModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold"><i class="fa-solid fa-location-dot text-warning me-2"></i>Add Shipping Address</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form th:action="@{/profile/address}" method="POST">
+                <div class="modal-body">
+                    <div class="mb-2">
+                        <label class="form-label small fw-bold text-muted">Full Name</label>
+                        <input type="text" name="fullName" class="form-control" required th:value="${user.fullName}">
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label small fw-bold text-muted">Phone Number</label>
+                        <input type="text" name="phone" class="form-control" required placeholder="+91 99000 00000">
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label small fw-bold text-muted">Street Address</label>
+                        <input type="text" name="streetAddress" class="form-control" required placeholder="Flat / Building, Road, Area">
+                    </div>
+                    <div class="row g-2 mb-2">
+                        <div class="col-6">
+                            <label class="form-label small fw-bold text-muted">City</label>
+                            <input type="text" name="city" class="form-control" required placeholder="New Delhi">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small fw-bold text-muted">State</label>
+                            <input type="text" name="state" class="form-control" required placeholder="Delhi">
+                        </div>
+                    </div>
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <label class="form-label small fw-bold text-muted">Postal Code</label>
+                            <input type="text" name="postalCode" class="form-control" required placeholder="110001">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small fw-bold text-muted">Country</label>
+                            <input type="text" name="country" class="form-control" required value="India">
+                        </div>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="isDefault" value="true" id="defaultCheck" checked>
+                        <label class="form-check-label small" for="defaultCheck">Set as default shipping address</label>
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-warning fw-bold">Save Address</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Change Email with Brevo OTP Modal -->
+<div class="modal fade" id="changeEmailModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold"><i class="fa-solid fa-shield-check text-warning me-2"></i>Change Email via Brevo OTP</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="emailOtpAlert" class="alert d-none py-2 small"></div>
+
+                <!-- Step 1: Input New Email -->
+                <div id="emailStep1">
+                    <p class="small text-muted">Enter your new email address. We will dispatch a secure 6-digit OTP code to verify ownership.</p>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">New Email Address</label>
+                        <input type="email" id="inputNewEmail" class="form-control" placeholder="new.email@example.com" required>
+                    </div>
+                    <button type="button" id="btnSendEmailOtp" class="btn btn-warning w-100 fw-bold">
+                        <i class="fa-solid fa-paper-plane me-1"></i> Send Verification Code
+                    </button>
+                </div>
+
+                <!-- Step 2: Input 6-Digit OTP -->
+                <div id="emailStep2" class="d-none">
+                    <p class="small text-muted">Enter the 6-digit code sent to <strong id="displayTargetEmail" class="text-dark"></strong>:</p>
+                    <div class="mb-3">
+                        <input type="text" id="inputEmailOtp" maxlength="6" class="form-control form-control-lg text-center fw-bold fs-3 tracking-wider" placeholder="••••••" inputmode="numeric">
+                    </div>
+                    <div id="simulatedProfileOtpBox" class="bg-light p-2 rounded-3 border mb-3 small d-none">
+                        <div class="text-muted d-flex justify-content-between align-items-center">
+                            <span>Code: <code id="displayProfileSimCode" class="fw-bold fs-6">123456</code></span>
+                            <button type="button" class="btn btn-xs btn-outline-secondary py-0" onclick="document.getElementById('inputEmailOtp').value = document.getElementById('displayProfileSimCode').innerText">Auto-fill</button>
+                        </div>
+                    </div>
+                    <button type="button" id="btnVerifyEmailOtp" class="btn btn-success w-100 fw-bold">
+                        <i class="fa-solid fa-check-circle me-1"></i> Confirm & Update Email
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const btnSendOtp = document.getElementById('btnSendEmailOtp');
+    const btnVerifyOtp = document.getElementById('btnVerifyEmailOtp');
+    const inputNewEmail = document.getElementById('inputNewEmail');
+    const inputOtp = document.getElementById('inputEmailOtp');
+    const alertBox = document.getElementById('emailOtpAlert');
+    const step1 = document.getElementById('emailStep1');
+    const step2 = document.getElementById('emailStep2');
+    const targetEmailSpan = document.getElementById('displayTargetEmail');
+    const simBox = document.getElementById('simulatedProfileOtpBox');
+    const simCode = document.getElementById('displayProfileSimCode');
+
+    let currentNewEmail = '';
+
+    btnSendOtp.addEventListener('click', async () => {
+        const val = inputNewEmail.value.trim();
+        if (!val || !val.includes('@')) {
+            showAlert('Please enter a valid email address.', 'danger');
+            return;
+        }
+        currentNewEmail = val;
+        btnSendOtp.disabled = true;
+        btnSendOtp.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Sending...';
+
+        try {
+            const res = await fetch('/profile/email/send-otp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ newEmail: currentNewEmail })
+            });
+            const data = await res.json();
+            if (data.success) {
+                showAlert(data.message, 'success');
+                targetEmailSpan.textContent = currentNewEmail;
+                step1.classList.add('d-none');
+                step2.classList.remove('d-none');
+                if (data.simulatedCode) {
+                    simCode.textContent = data.simulatedCode;
+                    simBox.classList.remove('d-none');
+                }
+            } else {
+                showAlert(data.message || 'Failed to dispatch OTP.', 'danger');
+                btnSendOtp.disabled = false;
+            }
+        } catch (err) {
+            showAlert('Network error while requesting OTP.', 'danger');
+            btnSendOtp.disabled = false;
+        } finally {
+            btnSendOtp.innerHTML = '<i class="fa-solid fa-paper-plane me-1"></i> Send Verification Code';
+        }
+    });
+
+    btnVerifyOtp.addEventListener('click', async () => {
+        const otpVal = inputOtp.value.trim();
+        if (otpVal.length !== 6) {
+            showAlert('Please enter the 6-digit OTP code.', 'danger');
+            return;
+        }
+        btnVerifyOtp.disabled = true;
+        btnVerifyOtp.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Verifying...';
+
+        try {
+            const res = await fetch('/profile/email/verify-otp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ newEmail: currentNewEmail, otp: otpVal })
+            });
+            const data = await res.json();
+            if (data.success) {
+                showAlert(data.message, 'success');
+                if (data.redirectUrl) {
+                    setTimeout(() => { window.location.href = data.redirectUrl; }, 1500);
+                } else {
+                    setTimeout(() => { window.location.reload(); }, 1500);
+                }
+            } else {
+                showAlert(data.message || 'Invalid or expired OTP code.', 'danger');
+                btnVerifyOtp.disabled = false;
+            }
+        } catch (err) {
+            showAlert('Verification failed. Please try again.', 'danger');
+            btnVerifyOtp.disabled = false;
+        } finally {
+            btnVerifyOtp.innerHTML = '<i class="fa-solid fa-check-circle me-1"></i> Confirm & Update Email';
+        }
+    });
+
+    function showAlert(msg, type) {
+        alertBox.className = `alert alert-${type} py-2 small`;
+        alertBox.textContent = msg;
+        alertBox.classList.remove('d-none');
+    }
+});
+</script>
+
+<div th:replace="~{fragments/chat-widget :: chatWidget}"></div>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="card(product)" class="col-6 col-md-4 col-lg-3 mb-4">
+    <div class="omni-card" th:attr="data-product-id=${product.id}">
+        <!-- Image Wrap -->
+        <div class="omni-card-img-wrap">
+            <span th:if="${product.discountPercent > 0}" class="omni-card-badge" th:text="'-' + ${product.discountPercent} + '%'">-15%</span>
+            <a th:href="@{/products/{id}(id=${product.id})}">
+                <img th:src="${product.primaryImageUrl}" th:alt="${product.name}" class="omni-card-img"
+                     onerror="this.src='https://placehold.co/300x300/f8fafc/1e293b?text=' + encodeURIComponent(this.alt)">
+            </a>
+        </div>
+
+        <!-- Card Body -->
+        <div class="omni-card-body">
+            <div class="omni-card-brand" th:text="${product.brand}">Brand</div>
+            <a th:href="@{/products/{id}(id=${product.id})}" class="omni-card-title" th:text="${product.name}">Product Name</a>
+
+            <!-- Rating -->
+            <div class="omni-rating-wrap">
+                <div class="omni-stars">
+                    <i class="fa-solid fa-star"></i>
+                    <span class="fw-bold text-dark" th:text="${product.rating}">4.5</span>
+                </div>
+                <span class="text-secondary" th:text="'(' + ${product.reviewCount} + ')'"> (120)</span>
+            </div>
+
+            <!-- Explainability: Why this product was recommended -->
+            <div th:if="${product.whyRecommended != null and !product.whyRecommended.isEmpty()}" class="omni-why-recommended-pill">
+                <i class="fa-solid fa-sparkles"></i>
+                <span th:text="${product.whyRecommended}">Matches your preferred budget</span>
+            </div>
+
+            <!-- Price -->
+            <div class="omni-price-wrap">
+                <span class="omni-price-current" th:text="'₹' + ${product.price != null ? #numbers.formatDecimal(product.price, 1, 'COMMA', 0, 'POINT') : '0'}">₹49,999</span>
+                <span th:if="${product.originalPrice != null and product.originalPrice > product.price}"
+                      class="omni-price-orig" th:text="'₹' + ${#numbers.formatDecimal(product.originalPrice, 1, 'COMMA', 0, 'POINT')}">₹59,999</span>
+                <span th:if="${product.discountPercent > 0}" class="omni-price-discount" th:text="${product.discountPercent} + '% off'">15% off</span>
+            </div>
+
+            <!-- Actions -->
+            <div class="d-flex flex-column gap-2 mt-2">
+                <form th:action="@{/cart/add}" method="POST" class="w-100">
+                    <input type="hidden" name="productId" th:value="${product.id}">
+                    <input type="hidden" name="quantity" value="1">
+                    <button type="submit" class="omni-btn-add-cart">
+                        <i class="fa-solid fa-cart-plus me-1"></i> Add to Cart
+                    </button>
+                </form>
+                <div class="d-flex gap-2">
+                    <button type="button" class="btn omni-btn-compare-outline w-100 btn-add-compare" th:attr="data-product-id=${product.id}">
+                        <i class="fa-solid fa-scale-balanced me-1"></i> Compare
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

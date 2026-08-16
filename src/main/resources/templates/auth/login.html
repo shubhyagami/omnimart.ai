@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Sign In')}"></head>
+<body class="bg-light">
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <!-- Brand -->
+            <div class="text-center mb-4">
+                <a th:href="@{/}" class="omni-logo justify-content-center text-dark fs-2">
+                    <i class="fa-solid fa-bolt-lightning text-warning"></i> OmniMart<span class="text-primary">.ai</span>
+                </a>
+            </div>
+
+            <!-- Login Card -->
+            <div class="card border-0 shadow-sm rounded-4 p-4">
+                <h3 class="fw-bold mb-3 text-dark">Sign In</h3>
+
+                <div th:if="${errorMessage}" class="alert alert-danger py-2 small" th:text="${errorMessage}"></div>
+                <div th:if="${successMessage}" class="alert alert-success py-2 small" th:text="${successMessage}"></div>
+                <div th:if="${param.registered}" class="alert alert-success py-2 small">Account created successfully! Please sign in.</div>
+
+                <form th:action="@{/login}" method="POST">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">Email address</label>
+                        <input type="email" name="email" class="form-control form-control-lg fs-6" required placeholder="user@omnimart.com">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">Password</label>
+                        <input type="password" name="password" class="form-control form-control-lg fs-6" required placeholder="••••••••">
+                    </div>
+
+                    <button type="submit" class="btn btn-warning w-100 py-2 fw-bold text-dark mb-3">
+                        Sign In
+                    </button>
+                </form>
+
+                <!-- Demo Account Presets Toggle Button -->
+                <div class="mb-3">
+                    <button type="button" class="btn btn-outline-dark btn-sm w-100 py-2 d-flex align-items-center justify-content-between rounded-3" data-bs-toggle="collapse" data-bs-target="#demoPresetsCollapse" aria-expanded="false">
+                        <span><i class="fa-solid fa-key text-warning me-2"></i><strong>Demo Account Credentials</strong></span>
+                        <i class="fa-solid fa-chevron-down small text-muted"></i>
+                    </button>
+
+                    <div class="collapse mt-2" id="demoPresetsCollapse">
+                        <div class="card card-body bg-light border-0 shadow-sm p-3 rounded-3 small">
+                            <div class="mb-2 pb-2 border-bottom">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span class="badge bg-primary">Customer Account</span>
+                                    <button type="button" class="btn btn-xs btn-outline-primary py-0 px-2 fw-semibold" onclick="fillCredentials('user@omnimart.com', 'password123')">
+                                        <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> Auto-fill
+                                    </button>
+                                </div>
+                                <div class="text-muted">Email: <code class="text-dark">user@omnimart.com</code></div>
+                                <div class="text-muted">Password: <code class="text-dark">password123</code></div>
+                            </div>
+
+                            <div>
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span class="badge bg-danger">Admin Account</span>
+                                    <button type="button" class="btn btn-xs btn-outline-danger py-0 px-2 fw-semibold" onclick="fillCredentials('admin@omnimart.com', 'admin123')">
+                                        <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> Auto-fill
+                                    </button>
+                                </div>
+                                <div class="text-muted">Email: <code class="text-dark">admin@omnimart.com</code></div>
+                                <div class="text-muted">Password: <code class="text-dark">admin123</code></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center small text-muted">
+                    New to OmniMart? <a th:href="@{/register}" class="fw-bold text-primary text-decoration-none">Create your account</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function fillCredentials(email, password) {
+    const emailInput = document.querySelector('input[name="email"]');
+    const passwordInput = document.querySelector('input[name="password"]');
+    if (emailInput && passwordInput) {
+        emailInput.value = email;
+        passwordInput.value = password;
+        emailInput.classList.add('bg-warning-subtle');
+        passwordInput.classList.add('bg-warning-subtle');
+        setTimeout(() => {
+            emailInput.classList.remove('bg-warning-subtle');
+            passwordInput.classList.remove('bg-warning-subtle');
+        }, 1000);
+    }
+}
+</script>
+</body>
+</html>

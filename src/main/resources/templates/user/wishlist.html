@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Your Wishlist')}"></head>
+<body>
+<header th:replace="~{fragments/header :: navbar}"></header>
+
+<main class="container py-4">
+    <h2 class="fw-bold mb-4"><i class="fa-solid fa-heart text-danger me-2"></i>Your Wishlist</h2>
+
+    <div th:if="${#lists.isEmpty(products)}" class="card border-0 shadow-sm rounded-4 p-5 text-center bg-white">
+        <i class="fa-regular fa-heart fs-1 text-muted mb-3"></i>
+        <h4>Your Wishlist is empty</h4>
+        <p class="text-muted">Save items that you want to buy later.</p>
+        <div>
+            <a th:href="@{/products}" class="btn btn-warning fw-bold px-4">Explore Products</a>
+        </div>
+    </div>
+
+    <div class="row" th:unless="${#lists.isEmpty(products)}">
+        <th:block th:each="product : ${products}">
+            <div th:replace="~{fragments/product-card :: card(${product})}"></div>
+        </th:block>
+    </div>
+</main>
+
+<div th:replace="~{fragments/chat-widget :: chatWidget}"></div>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

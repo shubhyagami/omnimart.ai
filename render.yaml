@@ -1,0 +1,26 @@
+# ==========================================
+# Render Blueprint (render.yaml)
+# OmniMart AI - Full-Stack Deployment
+# ==========================================
+services:
+  - type: web
+    name: omnimart-ai
+    runtime: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./Dockerfile
+    autoDeploy: true
+    healthCheckPath: /
+    envVars:
+      - key: AI_PROVIDER
+        value: nvidia
+      - key: NVIDIA_API_KEYS
+        value: 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,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,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
+      - key: NVIDIA_MODEL
+        value: nvidia/nemotron-3-ultra-550b-a55b
+      - key: BREVO_API_KEY
+        sync: false
+      - key: BREVO_SENDER_EMAIL
+        value: support@omnimart-ai.com
+      - key: BREVO_SENDER_NAME
+        value: OmniMart AI

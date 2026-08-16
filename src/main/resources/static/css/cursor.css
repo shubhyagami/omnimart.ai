@@ -1,0 +1,148 @@
+/* =========================================================
+   OmniMart AI - Animated Custom Shopping Cursor & Animations
+   ========================================================= */
+
+/* Cursor Elements */
+.omni-cursor-dot {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 10px;
+    height: 10px;
+    background: #f59e0b;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s ease, height 0.2s ease, background 0.2s ease, opacity 0.2s ease;
+    box-shadow: 0 0 12px rgba(245, 158, 11, 0.8), 0 0 20px rgba(245, 158, 11, 0.4);
+}
+
+.omni-cursor-follower {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 38px;
+    height: 38px;
+    border: 2px solid rgba(245, 158, 11, 0.5);
+    background: rgba(245, 158, 11, 0.05);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99998;
+    transform: translate(-50%, -50%);
+    transition: width 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                height 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                border-color 0.2s ease,
+                background 0.2s ease,
+                transform 0.15s ease-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(1px);
+}
+
+.omni-cursor-follower .cursor-icon {
+    font-size: 14px;
+    color: #f59e0b;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Hover States on Interactive Elements */
+body.cursor-hover .omni-cursor-dot {
+    width: 6px;
+    height: 6px;
+    background: #ffffff;
+    box-shadow: 0 0 10px #ffffff;
+}
+
+body.cursor-hover .omni-cursor-follower {
+    width: 52px;
+    height: 52px;
+    border-color: #f59e0b;
+    background: rgba(15, 23, 42, 0.85);
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.5), inset 0 0 10px rgba(245, 158, 11, 0.2);
+}
+
+body.cursor-hover .omni-cursor-follower .cursor-icon {
+    opacity: 1;
+    transform: scale(1);
+    animation: cartBounce 1.2s infinite ease-in-out;
+}
+
+/* Click Active State */
+body.cursor-click .omni-cursor-dot {
+    transform: translate(-50%, -50%) scale(2);
+    background: #10b981;
+}
+
+body.cursor-click .omni-cursor-follower {
+    transform: translate(-50%, -50%) scale(0.7);
+    border-color: #10b981;
+}
+
+/* Floating Particle Animation */
+.omni-click-particle {
+    position: fixed;
+    pointer-events: none;
+    border-radius: 50%;
+    z-index: 99997;
+    animation: particleFade 0.65s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes particleFade {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(var(--tx), var(--ty)) scale(0);
+    }
+}
+
+@keyframes cartBounce {
+    0%, 100% {
+        transform: scale(1) translateY(0);
+    }
+    50% {
+        transform: scale(1.15) translateY(-3px);
+    }
+}
+
+/* Customer Attraction Shimmer & Glow Effects */
+.shimmer-badge {
+    background: linear-gradient(90deg, #f59e0b, #fbbf24, #f59e0b);
+    background-size: 200% 100%;
+    animation: shimmerShift 2.5s infinite linear;
+    color: #0f172a !important;
+    font-weight: 800;
+}
+
+@keyframes shimmerShift {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.omni-card {
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+}
+
+.omni-card:hover {
+    transform: translateY(-8px) scale(1.015);
+    box-shadow: 0 20px 30px -10px rgba(15, 23, 42, 0.15), 0 0 15px rgba(245, 158, 11, 0.2);
+}
+
+.omni-btn-add-cart {
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.omni-btn-add-cart:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 20px rgba(245, 158, 11, 0.4);
+}
+
+.omni-btn-add-cart:active {
+    transform: scale(0.96);
+}

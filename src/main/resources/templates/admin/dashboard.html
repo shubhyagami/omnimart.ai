@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Admin Dashboard')}"></head>
+<body class="bg-light">
+<header th:replace="~{fragments/header :: navbar}"></header>
+
+<main class="container py-4">
+    <!-- Admin Subnav -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-3 border-bottom">
+        <div>
+            <h2 class="fw-bold mb-1"><i class="fa-solid fa-gauge text-warning me-2"></i>Executive Admin Portal</h2>
+            <small class="text-muted">Overview of store revenue, customer feedback intelligence, and predictive telemetry.</small>
+        </div>
+        <div class="d-flex gap-2">
+            <a th:href="@{/admin}" class="btn btn-dark btn-sm fw-bold">Overview</a>
+            <a th:href="@{/admin/analytics}" class="btn btn-outline-secondary btn-sm fw-bold">Product Intelligence</a>
+            <a th:href="@{/admin/feedback}" class="btn btn-outline-secondary btn-sm fw-bold">Feedback AI Engine</a>
+        </div>
+    </div>
+
+    <!-- 4 Top KPI Stat Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="omni-admin-stat-card">
+                <div class="omni-admin-stat-icon omni-stat-green"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+                <div>
+                    <div class="omni-admin-stat-value" th:text="'₹' + ${#numbers.formatDecimal(totalRevenue, 0, 'COMMA', 0, 'POINT')}">₹12,50,000</div>
+                    <div class="omni-admin-stat-label">Total Revenue</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="omni-admin-stat-card">
+                <div class="omni-admin-stat-icon omni-stat-blue"><i class="fa-solid fa-box"></i></div>
+                <div>
+                    <div class="omni-admin-stat-value" th:text="${totalOrders}">50</div>
+                    <div class="omni-admin-stat-label">Total Orders</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="omni-admin-stat-card">
+                <div class="omni-admin-stat-icon omni-stat-purple"><i class="fa-solid fa-users"></i></div>
+                <div>
+                    <div class="omni-admin-stat-value" th:text="${totalUsers}">20</div>
+                    <div class="omni-admin-stat-label">Active Customers</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="omni-admin-stat-card">
+                <div class="omni-admin-stat-icon omni-stat-amber"><i class="fa-solid fa-face-smile"></i></div>
+                <div>
+                    <div class="omni-admin-stat-value" th:text="${positivePct} + '%'">84.2%</div>
+                    <div class="omni-admin-stat-label">Positive Feedback Rate</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Natural Language Admin AI Question Assistant -->
+    <div class="omni-admin-card p-4 mb-4 bg-dark text-light border-0">
+        <div class="d-flex align-items-center gap-2 mb-2">
+            <i class="fa-solid fa-wand-magic-sparkles text-warning fs-4"></i>
+            <h5 class="fw-bold mb-0 text-white">Ask Admin AI (NVIDIA Nemotron Reasoning)</h5>
+        </div>
+        <p class="text-secondary small mb-3">Query your store catalog telemetry, inventory churn, and customer review topics using natural language:</p>
+
+        <!-- Prompt Chips -->
+        <div class="d-flex flex-wrap gap-2 mb-3">
+            <button class="btn btn-sm btn-outline-secondary text-light admin-ai-prompt-chip">What are customers complaining about this month?</button>
+            <button class="btn btn-sm btn-outline-secondary text-light admin-ai-prompt-chip">Which products have high views but low purchases?</button>
+            <button class="btn btn-sm btn-outline-secondary text-light admin-ai-prompt-chip">What features do customers request most often?</button>
+            <button class="btn btn-sm btn-outline-secondary text-light admin-ai-prompt-chip">Which products should we improve?</button>
+        </div>
+
+        <div class="input-group mb-2">
+            <input type="text" id="adminAiQuestionInput" class="form-control omni-admin-ai-input" placeholder="Type an executive question regarding inventory, complaints or conversion..." autocomplete="off">
+            <button id="adminAiAskBtn" class="btn btn-warning fw-bold px-4">Ask AI</button>
+        </div>
+
+        <!-- AI Result Box -->
+        <div id="adminAiResultBox" style="display: none;" class="omni-admin-ai-response">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+                <strong class="text-warning"><i class="fa-solid fa-robot me-1"></i> AI Intelligence Officer</strong>
+                <small class="text-secondary" id="adminAiProviderText">NVIDIA AI</small>
+            </div>
+            <p id="adminAiAnswerText" class="mb-0 text-light"></p>
+        </div>
+    </div>
+
+    <!-- Feedback Sentiment & Top Negative Products Grid -->
+    <div class="row g-4 mb-4">
+        <!-- Sentiment Chart -->
+        <div class="col-lg-5">
+            <div class="omni-admin-card h-100 p-4 bg-white">
+                <h5 class="fw-bold mb-3"><i class="fa-solid fa-chart-pie text-primary me-2"></i>Review Sentiment Distribution</h5>
+                <div style="max-height: 250px;" class="d-flex justify-content-center">
+                    <canvas id="sentimentChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trending Negative Issues by Topic -->
+        <div class="col-lg-7">
+            <div class="omni-admin-card h-100 p-4 bg-white">
+                <h5 class="fw-bold mb-3"><i class="fa-solid fa-chart-column text-danger me-2"></i>Top Recurring Complaint Topics</h5>
+                <div style="max-height: 250px;">
+                    <canvas id="topicsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Orders Table -->
+    <div class="omni-admin-card p-4 bg-white">
+        <h5 class="fw-bold mb-3"><i class="fa-solid fa-clock-rotate-left text-primary me-2"></i>Recent Orders</h5>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light small">
+                    <tr>
+                        <th>Order #</th>
+                        <th>Customer</th>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="ord : ${recentOrders}">
+                        <td class="fw-bold" th:text="${ord.orderNumber}">ORD-1234</td>
+                        <td th:text="${ord.user.fullName}">Customer Name</td>
+                        <td th:text="${#temporals.format(ord.createdAt, 'dd MMM yyyy')}">15 Aug 2026</td>
+                        <td class="fw-bold" th:text="'₹' + ${#numbers.formatDecimal(ord.finalAmount, 0, 'COMMA', 0, 'POINT')}">₹49,999</td>
+                        <td>
+                            <span class="badge" th:classappend="${ord.status.name() == 'DELIVERED' ? 'bg-success' : 'bg-primary'}" th:text="${ord.status}">CONFIRMED</span>
+                        </td>
+                        <td>
+                            <a th:href="@{/orders/{id}(id=${ord.id})}" class="btn btn-outline-secondary btn-sm">View</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<script th:src="@{/js/admin-dashboard.js}"></script>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

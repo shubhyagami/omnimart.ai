@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Secure Checkout')}"></head>
+<body>
+<header th:replace="~{fragments/header :: navbar}"></header>
+
+<main class="container py-4">
+    <h2 class="fw-bold mb-4"><i class="fa-solid fa-lock text-success me-2"></i>Secure Checkout</h2>
+
+    <div th:if="${errorMessage}" class="alert alert-danger mb-4 py-2" th:text="${errorMessage}"></div>
+
+    <form th:action="@{/checkout}" th:object="${checkoutRequest}" method="POST">
+        <div class="row g-4">
+            <!-- Left: Shipping & Payment Forms -->
+            <div class="col-lg-8">
+                <!-- 1. Shipping Address Section -->
+                <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+                    <h5 class="fw-bold mb-3"><i class="fa-solid fa-location-dot text-primary me-2"></i>1. Shipping Address</h5>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">Full Name</label>
+                            <input type="text" th:field="*{fullName}" class="form-control" required placeholder="Full Name">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">Mobile Number</label>
+                            <input type="text" th:field="*{phone}" class="form-control" required placeholder="10-digit mobile number">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold text-muted">Street Address / Flat / Building</label>
+                            <input type="text" th:field="*{streetAddress}" class="form-control" required placeholder="Street address">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-bold text-muted">City</label>
+                            <input type="text" th:field="*{city}" class="form-control" required placeholder="City">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-bold text-muted">State</label>
+                            <input type="text" th:field="*{state}" class="form-control" required placeholder="State">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-bold text-muted">Postal Code</label>
+                            <input type="text" th:field="*{postalCode}" class="form-control" required placeholder="PIN Code">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted">Country</label>
+                            <input type="text" th:field="*{country}" class="form-control" value="India" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Payment Method Section -->
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+                    <h5 class="fw-bold mb-3"><i class="fa-solid fa-credit-card text-primary me-2"></i>2. Payment Method</h5>
+
+                    <div class="d-flex flex-column gap-3">
+                        <div class="form-check p-3 border rounded-3 bg-light">
+                            <input class="form-check-input ms-0 me-3" type="radio" th:field="*{paymentMethod}" id="payCard" value="CREDIT_CARD" checked>
+                            <label class="form-check-label fw-bold text-dark" for="payCard">
+                                <i class="fa-regular fa-credit-card text-primary me-2"></i> Credit or Debit Card (Mock Gateway)
+                            </label>
+                            <div class="mt-2 ps-4">
+                                <input type="text" class="form-control form-control-sm mb-2" placeholder="Card Number (Demo: 4111 2222 3333 4444)">
+                                <div class="row g-2">
+                                    <div class="col-6"><input type="text" class="form-control form-control-sm" placeholder="MM/YY"></div>
+                                    <div class="col-6"><input type="password" class="form-control form-control-sm" placeholder="CVV"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-check p-3 border rounded-3">
+                            <input class="form-check-input ms-0 me-3" type="radio" th:field="*{paymentMethod}" id="payUPI" value="UPI">
+                            <label class="form-check-label fw-bold text-dark" for="payUPI">
+                                <i class="fa-solid fa-mobile-screen-button text-success me-2"></i> UPI / QR Code (Google Pay, PhonePe, Paytm)
+                            </label>
+                        </div>
+
+                        <div class="form-check p-3 border rounded-3">
+                            <input class="form-check-input ms-0 me-3" type="radio" th:field="*{paymentMethod}" id="payCOD" value="COD">
+                            <label class="form-check-label fw-bold text-dark" for="payCOD">
+                                <i class="fa-solid fa-money-bill-wave text-warning me-2"></i> Cash on Delivery (COD)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Order Review & Total -->
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-white sticky-top" style="top: 20px;">
+                    <h5 class="fw-bold mb-3">Order Summary</h5>
+
+                    <div class="d-flex justify-content-between mb-2 small text-muted">
+                        <span>Items Total:</span>
+                        <span class="fw-semibold text-dark" th:text="'₹' + ${#numbers.formatDecimal(cart.subtotal, 0, 'COMMA', 0, 'POINT')}">₹49,999</span>
+                    </div>
+
+                    <div class="d-flex justify-content-between mb-2 small text-muted">
+                        <span>Shipping & Handling:</span>
+                        <span class="text-success fw-bold">FREE</span>
+                    </div>
+
+                    <div class="d-flex justify-content-between mb-3 small text-muted">
+                        <span>Estimated Tax (18% GST):</span>
+                        <span class="fw-semibold text-dark" th:text="'₹' + ${#numbers.formatDecimal(cart.subtotal * 0.18, 0, 'COMMA', 0, 'POINT')}">₹8,999</span>
+                    </div>
+
+                    <hr>
+
+                    <div class="d-flex justify-content-between mb-4">
+                        <span class="fs-5 fw-bold text-dark">Total Payable:</span>
+                        <span class="fs-4 fw-bold text-success" th:text="'₹' + ${#numbers.formatDecimal(cart.subtotal * 1.18, 0, 'COMMA', 0, 'POINT')}">₹58,998</span>
+                    </div>
+
+                    <button type="submit" class="btn btn-warning w-100 py-3 fw-bold text-dark shadow-sm fs-5">
+                        Place Your Order
+                    </button>
+
+                    <small class="text-muted text-center d-block mt-3">
+                        <i class="fa-solid fa-shield-halved text-success me-1"></i> 256-Bit SSL Encrypted Checkout
+                    </small>
+                </div>
+            </div>
+        </div>
+    </form>
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

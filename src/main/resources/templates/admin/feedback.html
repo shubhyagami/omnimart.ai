@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Customer Feedback Intelligence')}"></head>
+<body class="bg-light">
+<header th:replace="~{fragments/header :: navbar}"></header>
+
+<main class="container py-4">
+    <!-- Admin Subnav -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-3 border-bottom">
+        <div>
+            <h2 class="fw-bold mb-1"><i class="fa-solid fa-brain text-warning me-2"></i>Customer Feedback Intelligence Engine</h2>
+            <small class="text-muted">NLP extraction of sentiment, emotion, and hardware issue topics across customer reviews.</small>
+        </div>
+        <div class="d-flex gap-2">
+            <a th:href="@{/admin}" class="btn btn-outline-secondary btn-sm fw-bold">Overview</a>
+            <a th:href="@{/admin/analytics}" class="btn btn-outline-secondary btn-sm fw-bold">Product Intelligence</a>
+            <a th:href="@{/admin/feedback}" class="btn btn-dark btn-sm fw-bold">Feedback AI Engine</a>
+        </div>
+    </div>
+
+    <!-- Sentiment Summary Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white text-center">
+                <span class="badge bg-success bg-opacity-10 text-success fs-6 mb-1">Positive Reviews</span>
+                <div class="fs-3 fw-bold text-success" th:text="${sentiments.get('Positive')}">180</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white text-center">
+                <span class="badge bg-danger bg-opacity-10 text-danger fs-6 mb-1">Negative Reviews</span>
+                <div class="fs-3 fw-bold text-danger" th:text="${sentiments.get('Negative')}">32</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white text-center">
+                <span class="badge bg-warning bg-opacity-10 text-warning fs-6 mb-1">Mixed Sentiment</span>
+                <div class="fs-3 fw-bold text-warning" th:text="${sentiments.get('Mixed')}">24</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white text-center">
+                <span class="badge bg-secondary bg-opacity-10 text-secondary fs-6 mb-1">Neutral Sentiment</span>
+                <div class="fs-3 fw-bold text-secondary" th:text="${sentiments.get('Neutral')}">14</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Products with Most Complaints (Quality Flagging) -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+        <h5 class="fw-bold mb-3"><i class="fa-solid fa-triangle-exclamation text-danger me-2"></i>Products Flagged for Negative Feedback Audit</h5>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle small">
+                <thead class="table-light">
+                    <tr>
+                        <th>Product Name</th>
+                        <th class="text-end">Negative Feedback Volume</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="row : ${negativeProducts}">
+                        <td class="fw-semibold text-dark" th:text="${row[1]}">Product Name</td>
+                        <td class="text-end fw-bold text-danger" th:text="${row[2]} + ' negative reviews'">12</td>
+                        <td class="text-center">
+                            <a th:href="@{/products/{id}(id=${row[0]})}" class="btn btn-outline-primary btn-sm">Inspect Product</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Live Customer Feedback Stream -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+        <h5 class="fw-bold mb-3"><i class="fa-solid fa-list-check text-primary me-2"></i>Live Structured Feedback Extraction Stream</h5>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle small">
+                <thead class="table-light">
+                    <tr>
+                        <th>Product</th>
+                        <th>Sentiment</th>
+                        <th>Emotion</th>
+                        <th>Primary Topic</th>
+                        <th>Confidence</th>
+                        <th>Extracted Issues / Positives</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="fb : ${recentFeedbacks}">
+                        <td class="fw-semibold" th:text="${fb.product.name}">Product Name</td>
+                        <td>
+                            <span class="badge" th:classappend="${fb.sentiment == 'Positive' ? 'bg-success' : (fb.sentiment == 'Negative' ? 'bg-danger' : 'bg-warning text-dark')}"
+                                  th:text="${fb.sentiment}">Positive</span>
+                        </td>
+                        <td th:text="${fb.emotion}">Satisfied</td>
+                        <td><span class="badge bg-light text-dark border" th:text="${fb.primaryTopic}">Battery</span></td>
+                        <td th:text="${#numbers.formatPercent(fb.confidenceScore, 1, 0)}">92%</td>
+                        <td>
+                            <div th:if="${fb.specificIssuesJson != null and fb.specificIssuesJson != '[]'}" class="text-danger small">
+                                <i class="fa-solid fa-circle-exclamation me-1"></i><span th:text="${fb.specificIssuesJson}">Issues</span>
+                            </div>
+                            <div th:if="${fb.positiveAspectsJson != null and fb.positiveAspectsJson != '[]'}" class="text-success small">
+                                <i class="fa-solid fa-circle-check me-1"></i><span th:text="${fb.positiveAspectsJson}">Positives</span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

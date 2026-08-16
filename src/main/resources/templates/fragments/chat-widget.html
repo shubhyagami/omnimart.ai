@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="chatWidget">
+    <!-- Floating Trigger Button -->
+    <button id="omniChatFloatingBtn" class="omni-chat-floating-btn" type="button" aria-label="Open AI Shopping Assistant">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+        <span>AI Shopping Assistant</span>
+    </button>
+
+    <!-- Floating Chat Window -->
+    <div id="omniChatWindow" class="omni-chat-window">
+        <!-- Header -->
+        <div class="omni-chat-header">
+            <div class="omni-chat-header-title">
+                <i class="fa-solid fa-robot text-warning"></i>
+                <span>OmniMart AI Assistant</span>
+                <span id="omniChatProviderBadge" class="omni-chat-provider-badge">Nemotron</span>
+            </div>
+            <button id="omniChatCloseBtn" class="omni-chat-close-btn" type="button" aria-label="Close Assistant">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- Message Stream Area -->
+        <div id="omniChatMessages" class="omni-chat-messages">
+            <!-- Welcome Initial Message -->
+            <div class="omni-msg omni-msg-ai">
+                <div class="omni-msg-bubble">
+                    <p class="mb-1"><strong>Hello! I am your AI Shopping Specialist.</strong></p>
+                    <p class="mb-0">Tell me what you are looking for, your budget, or specific features you need. (e.g. <em>"Gaming laptop under ₹80,000"</em> or <em>"Compare the top two headphones"</em>)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Suggested Follow-up Chips -->
+        <div id="omniChatChips" class="omni-chat-chips">
+            <button class="omni-chip" onclick="submitChatMessage('Best gaming laptop under ₹80,000')">Best gaming laptop under ₹80k</button>
+            <button class="omni-chip" onclick="submitChatMessage('Phone with best camera under ₹40,000')">Camera phone under ₹40k</button>
+            <button class="omni-chip" onclick="submitChatMessage('Top rated wireless ANC headphones')">Top rated ANC headphones</button>
+        </div>
+
+        <!-- Input Bar -->
+        <div class="omni-chat-input-wrap">
+            <input type="text" id="omniChatInput" class="omni-chat-input" placeholder="Ask AI assistant..." autocomplete="off">
+            <button id="omniChatSendBtn" class="omni-chat-send-btn" type="button" aria-label="Send Message">
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+</div>
+</body>
+</html>

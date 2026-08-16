@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Product Intelligence & Analytics')}"></head>
+<body class="bg-light">
+<header th:replace="~{fragments/header :: navbar}"></header>
+
+<main class="container py-4">
+    <!-- Admin Subnav -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-3 border-bottom">
+        <div>
+            <h2 class="fw-bold mb-1"><i class="fa-solid fa-chart-line text-primary me-2"></i>Product Intelligence & Telemetry</h2>
+            <small class="text-muted">Behavioral view-to-purchase funnels and catalog interaction telemetry.</small>
+        </div>
+        <div class="d-flex gap-2">
+            <a th:href="@{/admin}" class="btn btn-outline-secondary btn-sm fw-bold">Overview</a>
+            <a th:href="@{/admin/analytics}" class="btn btn-dark btn-sm fw-bold">Product Intelligence</a>
+            <a th:href="@{/admin/feedback}" class="btn btn-outline-secondary btn-sm fw-bold">Feedback AI Engine</a>
+        </div>
+    </div>
+
+    <!-- Analytics Tables Grid -->
+    <div class="row g-4 mb-4">
+        <!-- Most Viewed Products -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
+                <h5 class="fw-bold mb-3"><i class="fa-solid fa-eye text-primary me-2"></i>Most Viewed Products (Weekly)</h5>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle small">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Product Name</th>
+                                <th class="text-end">Views</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="row : ${mostViewed}">
+                                <td class="fw-semibold" th:text="${row[1]}">Product Name</td>
+                                <td class="text-end fw-bold text-primary" th:text="${row[2]}">145</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Most Added to Cart -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
+                <h5 class="fw-bold mb-3"><i class="fa-solid fa-cart-arrow-down text-success me-2"></i>Most Added to Cart</h5>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle small">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Product Name</th>
+                                <th class="text-end">Cart Adds</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="row : ${mostCartAdded}">
+                                <td class="fw-semibold" th:text="${row[1]}">Product Name</td>
+                                <td class="text-end fw-bold text-success" th:text="${row[2]}">84</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

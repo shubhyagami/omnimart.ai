@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Catalog')}"></head>
+<body>
+<header th:replace="~{fragments/header :: navbar}"></header>
+
+<main class="container py-4">
+    <!-- Breadcrumb & Search Header -->
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-1 small">
+                    <li class="breadcrumb-item"><a th:href="@{/}" class="text-decoration-none">Home</a></li>
+                    <li th:if="${category != null}" class="breadcrumb-item"><a th:href="@{/products}" class="text-decoration-none">Catalog</a></li>
+                    <li th:if="${category != null}" class="breadcrumb-item active" aria-current="page" th:text="${category.name}">Category</li>
+                    <li th:if="${category == null}" class="breadcrumb-item active" aria-current="page">Catalog</li>
+                </ol>
+            </nav>
+            <h2 class="fw-bold mb-0">
+                <span th:if="${category != null}"><i th:class="'fa-solid ' + ${category.icon} + ' text-warning me-2'"></i><span th:text="${category.name}"></span></span>
+                <span th:if="${category == null and filter.query != null and !filter.query.isEmpty()}">Results for "<span th:text="${filter.query}"></span>"</span>
+                <span th:if="${category == null and (filter.query == null or filter.query.isEmpty())}">All Products</span>
+            </h2>
+            <small class="text-muted" th:text="${page.totalElements} + ' products available'"></small>
+        </div>
+
+        <!-- Sort Controls -->
+        <div>
+            <form th:action="@{/products}" method="GET" class="d-flex align-items-center gap-2">
+                <input type="hidden" name="query" th:value="${filter.query}">
+                <input type="hidden" name="categoryId" th:value="${filter.categoryId}">
+                <input type="hidden" name="brandId" th:value="${filter.brandId}">
+                <input type="hidden" name="minPrice" th:value="${filter.minPrice}">
+                <input type="hidden" name="maxPrice" th:value="${filter.maxPrice}">
+                <input type="hidden" name="minRating" th:value="${filter.minRating}">
+
+                <label class="small text-muted text-nowrap">Sort by:</label>
+                <select name="sortBy" class="form-select form-select-sm" onchange="this.form.submit()">
+                    <option value="featured" th:selected="${filter.sortBy == 'featured' or filter.sortBy == null}">Featured & Rating</option>
+                    <option value="price_asc" th:selected="${filter.sortBy == 'price_asc'}">Price: Low to High</option>
+                    <option value="price_desc" th:selected="${filter.sortBy == 'price_desc'}">Price: High to Low</option>
+                    <option value="newest" th:selected="${filter.sortBy == 'newest'}">Newest Arrivals</option>
+                </select>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Filter Sidebar -->
+        <div class="col-lg-3 mb-4">
+            <div class="card border-0 shadow-sm rounded-3 p-3 sticky-top" style="top: 20px;">
+                <h5 class="fw-bold mb-3"><i class="fa-solid fa-sliders text-primary me-2"></i>Filters</h5>
+                
+                <form th:action="@{/products}" method="GET">
+                    <input type="hidden" name="query" th:value="${filter.query}">
+                    <input type="hidden" name="sortBy" th:value="${filter.sortBy}">
+
+                    <!-- Category Filter -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small text-muted">Category</label>
+                        <select name="categoryId" class="form-select form-select-sm">
+                            <option value="">All Categories</option>
+                            <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}" th:selected="${filter.categoryId == cat.id}"></option>
+                        </select>
+                    </div>
+
+                    <!-- Brand Filter -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small text-muted">Brand</label>
+                        <select name="brandId" class="form-select form-select-sm">
+                            <option value="">All Brands</option>
+                            <option th:each="b : ${brands}" th:value="${b.id}" th:text="${b.name}" th:selected="${filter.brandId == b.id}"></option>
+                        </select>
+                    </div>
+
+                    <!-- Price Range -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small text-muted">Price Range (₹)</label>
+                        <div class="d-flex gap-2">
+                            <input type="number" name="minPrice" th:value="${filter.minPrice}" class="form-control form-control-sm" placeholder="Min">
+                            <input type="number" name="maxPrice" th:value="${filter.maxPrice}" class="form-control form-control-sm" placeholder="Max">
+                        </div>
+                    </div>
+
+                    <!-- Minimum Rating Filter -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small text-muted">Customer Rating</label>
+                        <div class="d-flex flex-column gap-1">
+                            <label class="form-check-label small">
+                                <input type="radio" name="minRating" value="4.0" class="form-check-input me-1" th:checked="${filter.minRating != null and filter.minRating == 4.0}">
+                                <span class="text-warning">★★★★☆</span> 4★ & above
+                            </label>
+                            <label class="form-check-label small">
+                                <input type="radio" name="minRating" value="3.0" class="form-check-input me-1" th:checked="${filter.minRating != null and filter.minRating == 3.0}">
+                                <span class="text-warning">★★★☆☆</span> 3★ & above
+                            </label>
+                            <label class="form-check-label small">
+                                <input type="radio" name="minRating" value="" class="form-check-input me-1" th:checked="${filter.minRating == null}">
+                                Any rating
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-warning btn-sm fw-bold">Apply Filters</button>
+                        <a th:href="@{/products}" class="btn btn-outline-secondary btn-sm">Clear All</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="col-lg-9">
+            <div class="row">
+                <div th:if="${#lists.isEmpty(products)}" class="col-12 text-center py-5">
+                    <i class="fa-solid fa-box-open fs-1 text-muted mb-3"></i>
+                    <h4>No products found</h4>
+                    <p class="text-muted">Try adjusting your filters or search keywords.</p>
+                    <a th:href="@{/products}" class="btn btn-warning fw-bold">Reset Filters</a>
+                </div>
+
+                <th:block th:each="product : ${products}">
+                    <div th:replace="~{fragments/product-card :: card(${product})}"></div>
+                </th:block>
+            </div>
+
+            <!-- Pagination -->
+            <nav th:if="${page.totalPages > 1}" class="d-flex justify-content-center mt-4">
+                <ul class="pagination">
+                    <li class="page-item" th:classappend="${page.first} ? 'disabled'">
+                        <a class="page-link" th:href="@{/products(page=${page.number - 1}, query=${filter.query}, categoryId=${filter.categoryId}, brandId=${filter.brandId}, minPrice=${filter.minPrice}, maxPrice=${filter.maxPrice}, minRating=${filter.minRating}, sortBy=${filter.sortBy})}">Previous</a>
+                    </li>
+                    <li class="page-item" th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}" th:classappend="${page.number == i} ? 'active'">
+                        <a class="page-link" th:href="@{/products(page=${i}, query=${filter.query}, categoryId=${filter.categoryId}, brandId=${filter.brandId}, minPrice=${filter.minPrice}, maxPrice=${filter.maxPrice}, minRating=${filter.minRating}, sortBy=${filter.sortBy})}" th:text="${i + 1}">1</a>
+                    </li>
+                    <li class="page-item" th:classappend="${page.last} ? 'disabled'">
+                        <a class="page-link" th:href="@{/products(page=${page.number + 1}, query=${filter.query}, categoryId=${filter.categoryId}, brandId=${filter.brandId}, minPrice=${filter.minPrice}, maxPrice=${filter.maxPrice}, minRating=${filter.minRating}, sortBy=${filter.sortBy})}">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{fragments/chat-widget :: chatWidget}"></div>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Home')}"></head>
+<body>
+<header th:replace="~{fragments/header :: navbar}"></header>
+
+<main class="container py-4">
+    <!-- Hero Banner -->
+    <div class="omni-hero">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <span class="badge bg-warning text-dark fw-bold px-3 py-2 mb-3"><i class="fa-solid fa-sparkles me-1"></i> Next-Gen AI Shopping</span>
+                <h1 class="omni-hero-title">Experience <span class="omni-hero-highlight">Intelligent Commerce</span> with NVIDIA AI</h1>
+                <p class="omni-hero-desc">
+                    Discover products curated to your taste, compare specs with autonomous reasoning, and shop with continuous customer-feedback intelligence.
+                </p>
+                <div class="d-flex flex-wrap gap-3">
+                    <button type="button" class="btn btn-warning btn-lg fw-bold px-4 shadow-sm" onclick="document.getElementById('omniChatFloatingBtn').click()">
+                        <i class="fa-solid fa-wand-magic-sparkles me-2"></i> Launch AI Assistant
+                    </button>
+                    <a th:href="@{/products}" class="btn btn-outline-light btn-lg px-4">
+                        Browse Catalog
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-5 d-none d-lg-block text-center">
+                <div class="p-3 bg-dark bg-opacity-50 border border-secondary border-opacity-50 rounded-4 text-start">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <i class="fa-solid fa-robot text-warning fs-5"></i>
+                        <span class="fw-bold text-light">AI Quick Recommendations</span>
+                    </div>
+                    <div class="p-2 bg-secondary bg-opacity-25 rounded-3 mb-2 small text-light">
+                        <i class="fa-solid fa-check text-success me-2"></i><strong>Laptops:</strong> RTX 4070 series for 3D modeling
+                    </div>
+                    <div class="p-2 bg-secondary bg-opacity-25 rounded-3 mb-2 small text-light">
+                        <i class="fa-solid fa-check text-success me-2"></i><strong>Smartphones:</strong> 200MP Nightography flagships
+                    </div>
+                    <div class="p-2 bg-secondary bg-opacity-25 rounded-3 small text-light">
+                        <i class="fa-solid fa-check text-success me-2"></i><strong>Headphones:</strong> 30hr battery LDAC Hi-Res ANC
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Category Highlights Grid -->
+    <section class="mb-5">
+        <div class="omni-section-header">
+            <h2 class="omni-section-title"><i class="fa-solid fa-layer-group text-primary"></i> Popular Categories</h2>
+            <a th:href="@{/products}" class="text-decoration-none fw-bold small text-primary">View All <i class="fa-solid fa-arrow-right ms-1"></i></a>
+        </div>
+        <div class="row g-3">
+            <div th:each="cat : ${categories}" class="col-6 col-md-3 col-lg-3">
+                <a th:href="@{/category/{slug}(slug=${cat.slug})}" class="text-decoration-none">
+                    <div class="card h-100 border-0 shadow-sm text-center p-3 transition-all hover-shadow bg-white rounded-3">
+                        <div class="fs-1 text-primary mb-2">
+                            <i th:class="'fa-solid ' + ${cat.icon}"></i>
+                        </div>
+                        <h6 class="fw-bold text-dark mb-1" th:text="${cat.name}">Category</h6>
+                        <small class="text-muted" th:text="${cat.description}">Description</small>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hyper-Personalized "Recommended for You" with Explainability -->
+    <section class="mb-5">
+        <div class="omni-section-header">
+            <div>
+                <h2 class="omni-section-title">
+                    <i class="fa-solid fa-wand-magic-sparkles text-warning"></i> Recommended For You
+                    <span class="omni-section-badge">AI Hybrid Scored</span>
+                </h2>
+                <small class="text-secondary">Weighted multi-factor recommendations calculated from your profile and behavioral history.</small>
+            </div>
+            <a th:href="@{/products}" class="text-decoration-none fw-bold small text-primary">See More <i class="fa-solid fa-arrow-right ms-1"></i></a>
+        </div>
+        <div class="row">
+            <th:block th:each="product : ${recommendedProducts}">
+                <div th:replace="~{fragments/product-card :: card(${product})}"></div>
+            </th:block>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="mb-5">
+        <div class="omni-section-header">
+            <h2 class="omni-section-title"><i class="fa-solid fa-fire text-danger"></i> Featured & Trending Deals</h2>
+            <a th:href="@{/products}" class="text-decoration-none fw-bold small text-primary">Explore Deals <i class="fa-solid fa-arrow-right ms-1"></i></a>
+        </div>
+        <div class="row">
+            <th:block th:each="product : ${featuredProducts}">
+                <div th:replace="~{fragments/product-card :: card(${product})}"></div>
+            </th:block>
+        </div>
+    </section>
+
+    <!-- Top Rated by Verified Customers -->
+    <section class="mb-5">
+        <div class="omni-section-header">
+            <h2 class="omni-section-title"><i class="fa-solid fa-star text-warning"></i> Top Rated Tech</h2>
+            <a th:href="@{/products}" class="text-decoration-none fw-bold small text-primary">View Top Rated <i class="fa-solid fa-arrow-right ms-1"></i></a>
+        </div>
+        <div class="row">
+            <th:block th:each="product : ${topRatedProducts}">
+                <div th:replace="~{fragments/product-card :: card(${product})}"></div>
+            </th:block>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{fragments/chat-widget :: chatWidget}"></div>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

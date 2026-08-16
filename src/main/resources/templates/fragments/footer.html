@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<footer th:fragment="footer" class="mt-auto">
+    <!-- Back to top button -->
+    <div class="omni-footer-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+        Back to top
+    </div>
+
+    <!-- Main Footer Links -->
+    <div class="omni-footer-main">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-6 col-md-3 omni-footer-col">
+                    <h6>Get to Know Us</h6>
+                    <ul>
+                        <li><a href="#">About OmniMart AI</a></li>
+                        <li><a href="#">AI Recommendation Ethics</a></li>
+                        <li><a href="#">Customer Feedback Intelligence</a></li>
+                        <li><a href="#">Nemotron-3-Ultra Architecture</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-3 omni-footer-col">
+                    <h6>AI Shopping Tools</h6>
+                    <ul>
+                        <li><a href="javascript:void(0)" onclick="document.getElementById('omniChatFloatingBtn').click()">Launch AI Assistant</a></li>
+                        <li><a th:href="@{/compare}">Multi-Product Comparator</a></li>
+                        <li><a th:href="@{/profile}">User Preference Tuner</a></li>
+                        <li><a th:href="@{/products}">Natural Language Search</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-3 omni-footer-col">
+                    <h6>Let Us Help You</h6>
+                    <ul>
+                        <li><a th:href="@{/orders}">Track Orders</a></li>
+                        <li><a th:href="@{/orders}">Returns & Replacements</a></li>
+                        <li><a th:href="@{/cart}">Shopping Cart</a></li>
+                        <li><a th:href="@{/profile}">Privacy Settings</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-3 omni-footer-col">
+                    <h6>OmniMart AI Core</h6>
+                    <p class="text-secondary small">
+                        Full-stack e-commerce engine powered by Spring Boot 3.x, JPA, NVIDIA Nemotron models, and hybrid multi-factor recommendation algorithms.
+                    </p>
+                    <span class="badge bg-secondary">Java 21</span>
+                    <span class="badge bg-primary">Spring Security 6</span>
+                    <span class="badge bg-warning text-dark">NVIDIA AI</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Copyright -->
+    <div class="omni-footer-bottom">
+        <div class="container text-center text-md-between d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+            <p class="mb-0 text-secondary small">
+                <span class="text-warning fw-bold"><i class="fa-solid fa-wand-magic-sparkles me-1"></i>Design created by <strong>Shubh Kumar</strong></span> &nbsp;•&nbsp; © 2026 OmniMart AI Technologies Inc. All rights reserved. Designed for enterprise e-commerce demonstration.
+            </p>
+            <div class="d-flex align-items-center gap-3 small text-secondary">
+                <span><i class="fa-solid fa-shield-halved text-success me-1"></i>256-Bit SSL Secure</span>
+                <span><i class="fa-solid fa-bolt text-warning me-1"></i>AI Core v2.4</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Quick Compare Drawer -->
+    <div id="quickCompareBar">
+        <div class="container d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center gap-3">
+                <i class="fa-solid fa-scale-balanced fs-4 text-warning"></i>
+                <div>
+                    <span class="fw-bold">Compare Selected Products</span>
+                    <span class="badge bg-warning text-dark ms-2" id="compareCount">0</span>
+                    <small class="text-secondary d-block">Max 4 items side-by-side with AI spec analysis</small>
+                </div>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-outline-light btn-sm" onclick="clearCompareList()">Clear</button>
+                <a href="/compare" id="compareNowLink" class="btn btn-warning btn-sm fw-bold">Compare Now</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Chart.js for analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Custom Scripts -->
+    <script th:src="@{/js/main.js}"></script>
+    <script th:src="@{/js/telemetry.js}"></script>
+    <script th:src="@{/js/chat-assistant.js}"></script>
+    <script th:src="@{/js/cursor.js}"></script>
+    <script th:src="@{/js/live-wallpaper.js}"></script>
+    <script th:src="@{/js/network-location.js}"></script>
+    
+    <!-- Interactive Background Canvas Layer -->
+    <div th:replace="~{fragments/live-wallpaper :: wallpaper}"></div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Verify OTP | OmniMart AI')}"></head>
+<body class="bg-light">
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <!-- Brand -->
+            <div class="text-center mb-4">
+                <a th:href="@{/}" class="omni-logo justify-content-center text-dark fs-2 text-decoration-none">
+                    <i class="fa-solid fa-bolt-lightning text-warning"></i> OmniMart<span class="text-primary">.ai</span>
+                </a>
+            </div>
+
+            <!-- OTP Card -->
+            <div class="card border-0 shadow-sm rounded-4 p-4 text-center">
+                <div class="mb-3">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-warning-subtle text-warning p-3 rounded-circle" style="width: 64px; height: 64px;">
+                        <i class="fa-solid fa-shield-halved fs-3"></i>
+                    </div>
+                </div>
+
+                <h3 class="fw-bold mb-1 text-dark">Verify Your Email</h3>
+                <p class="text-muted small mb-3">
+                    We sent a 6-digit verification code to <br>
+                    <strong class="text-dark" th:text="${email}">user@example.com</strong>
+                </p>
+
+                <!-- Brevo Email Delivery Pill -->
+                <div class="d-inline-flex align-items-center justify-content-center gap-2 bg-dark text-light px-3 py-1 rounded-pill small mb-4 mx-auto" style="font-size: 0.78rem;">
+                    <i class="fa-solid fa-envelope-circle-check text-warning"></i>
+                    <span>Brevo SMTP API Delivery</span>
+                    <span class="badge bg-success">Active</span>
+                </div>
+
+                <div th:if="${errorMessage}" class="alert alert-danger py-2 small text-start" th:text="${errorMessage}"></div>
+                <div id="ajaxAlert" class="alert d-none py-2 small text-start"></div>
+
+                <!-- OTP Input Form -->
+                <form id="otpForm" th:action="@{/verify-otp}" method="POST">
+                    <input type="hidden" name="email" id="emailField" th:value="${email}">
+                    <input type="hidden" name="purpose" th:value="${purpose}">
+                    <input type="hidden" name="otp" id="otpCombined">
+
+                    <div class="d-flex justify-content-center gap-2 mb-4">
+                        <input type="text" maxlength="1" class="otp-box form-control form-control-lg text-center fw-bold fs-4" style="width: 48px; height: 56px; border: 2px solid #cbd5e1; border-radius: 10px;" required autofocus data-index="0" inputmode="numeric">
+                        <input type="text" maxlength="1" class="otp-box form-control form-control-lg text-center fw-bold fs-4" style="width: 48px; height: 56px; border: 2px solid #cbd5e1; border-radius: 10px;" required data-index="1" inputmode="numeric">
+                        <input type="text" maxlength="1" class="otp-box form-control form-control-lg text-center fw-bold fs-4" style="width: 48px; height: 56px; border: 2px solid #cbd5e1; border-radius: 10px;" required data-index="2" inputmode="numeric">
+                        <input type="text" maxlength="1" class="otp-box form-control form-control-lg text-center fw-bold fs-4" style="width: 48px; height: 56px; border: 2px solid #cbd5e1; border-radius: 10px;" required data-index="3" inputmode="numeric">
+                        <input type="text" maxlength="1" class="otp-box form-control form-control-lg text-center fw-bold fs-4" style="width: 48px; height: 56px; border: 2px solid #cbd5e1; border-radius: 10px;" required data-index="4" inputmode="numeric">
+                        <input type="text" maxlength="1" class="otp-box form-control form-control-lg text-center fw-bold fs-4" style="width: 48px; height: 56px; border: 2px solid #cbd5e1; border-radius: 10px;" required data-index="5" inputmode="numeric">
+                    </div>
+
+                    <button type="submit" id="btnSubmitOtp" class="btn btn-warning w-100 py-2 fw-bold text-dark mb-3">
+                        <i class="fa-solid fa-check-circle me-1"></i> Verify & Proceed
+                    </button>
+                </form>
+
+                <!-- Expiry Timer & Resend Button -->
+                <div class="d-flex align-items-center justify-content-between pt-2 border-top small text-muted">
+                    <div>
+                        <i class="fa-regular fa-clock me-1"></i> Expires in: <strong id="timerText" class="text-danger">05:00</strong>
+                    </div>
+                    <div>
+                        <button type="button" id="btnResendOtp" class="btn btn-link btn-sm p-0 text-decoration-none fw-bold" disabled>
+                            Resend Code
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Simulation Helper for Testing -->
+                <div th:if="${simulatedOtp != null}" class="bg-light p-2 rounded-3 border mt-3 small text-start">
+                    <div class="text-muted d-flex justify-content-between align-items-center">
+                        <span><i class="fa-solid fa-code me-1 text-primary"></i> Generated Code:</span>
+                        <code class="fs-6 fw-bold text-dark" id="displaySimCode" th:text="${simulatedOtp}">123456</code>
+                        <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-1" onclick="autoFillOtp(document.getElementById('displaySimCode').innerText)">Auto-fill</button>
+                    </div>
+                </div>
+
+                <div class="mt-4 small text-muted">
+                    Wrong email address? <a th:href="@{/register}" class="fw-bold text-primary text-decoration-none">Change details</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const boxes = document.querySelectorAll('.otp-box');
+    const hiddenField = document.getElementById('otpCombined');
+    const form = document.getElementById('otpForm');
+    const timerText = document.getElementById('timerText');
+    const btnResend = document.getElementById('btnResendOtp');
+    const ajaxAlert = document.getElementById('ajaxAlert');
+
+    // 1. Auto-focus and numeric handling
+    boxes.forEach((box, idx) => {
+        box.addEventListener('input', (e) => {
+            const val = e.target.value;
+            if (val.length === 1 && idx < boxes.length - 1) {
+                boxes[idx + 1].focus();
+            }
+            syncCombinedOtp();
+        });
+
+        box.addEventListener('keydown', (e) => {
+            if (e.key === 'Backspace' && !box.value && idx > 0) {
+                boxes[idx - 1].focus();
+            }
+        });
+
+        box.addEventListener('paste', (e) => {
+            e.preventDefault();
+            const pasteData = (e.clipboardData || window.clipboardData).getData('text').trim();
+            if (/^\d{6}$/.test(pasteData)) {
+                pasteData.split('').forEach((char, i) => {
+                    if (boxes[i]) boxes[i].value = char;
+                });
+                boxes[boxes.length - 1].focus();
+                syncCombinedOtp();
+            }
+        });
+    });
+
+    function syncCombinedOtp() {
+        let code = '';
+        boxes.forEach(b => code += b.value);
+        hiddenField.value = code;
+    }
+
+    form.addEventListener('submit', (e) => {
+        syncCombinedOtp();
+        if (hiddenField.value.length !== 6) {
+            e.preventDefault();
+            alert('Please enter all 6 digits of your verification code.');
+        }
+    });
+
+    // 2. Countdown Timer (5 Minutes)
+    let timeLeft = 300;
+    function updateTimer() {
+        const min = Math.floor(timeLeft / 60);
+        const sec = timeLeft % 60;
+        timerText.textContent = `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            timerText.textContent = 'Expired';
+            btnResend.disabled = false;
+        } else {
+            timeLeft--;
+        }
+    }
+    let timerInterval = setInterval(updateTimer, 1000);
+    setTimeout(() => { btnResend.disabled = false; }, 30000); // Allow resend after 30s
+
+    // 3. Resend OTP via Brevo API
+    btnResend.addEventListener('click', async () => {
+        btnResend.disabled = true;
+        btnResend.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Sending...';
+        
+        try {
+            const email = document.getElementById('emailField').value;
+            const res = await fetch('/api/otp/send', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email, purpose: 'Account Verification' })
+            });
+            const data = await res.json();
+            
+            ajaxAlert.className = data.success ? 'alert alert-success py-2 small text-start' : 'alert alert-danger py-2 small text-start';
+            ajaxAlert.textContent = data.message || 'Verification code resent!';
+            ajaxAlert.classList.remove('d-none');
+
+            if (data.simulatedCode) {
+                const simEl = document.getElementById('displaySimCode');
+                if (simEl) simEl.textContent = data.simulatedCode;
+            }
+
+            timeLeft = 300;
+            clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
+            setTimeout(() => { btnResend.disabled = false; }, 30000);
+        } catch (err) {
+            ajaxAlert.className = 'alert alert-danger py-2 small text-start';
+            ajaxAlert.textContent = 'Failed to resend code. Please try again.';
+            ajaxAlert.classList.remove('d-none');
+            btnResend.disabled = false;
+        } finally {
+            btnResend.textContent = 'Resend Code';
+        }
+    });
+
+    window.autoFillOtp = function(code) {
+        if (!code) return;
+        const clean = code.trim();
+        for (let i = 0; i < 6 && i < clean.length; i++) {
+            if (boxes[i]) boxes[i].value = clean[i];
+        }
+        syncCombinedOtp();
+    };
+});
+</script>
+</body>
+</html>

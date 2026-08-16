@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="wallpaper">
+    <!-- Interactive Background Canvas -->
+    <canvas id="live-wallpaper"></canvas>
+
+    <!-- Subtle Mode Pill / Status Indicator in Bottom Left -->
+    <div class="wallpaper-mode-pill d-none d-md-flex">
+        <div class="wallpaper-pulse-dot"></div>
+        <span>OmniMart AI Live Cosmos</span>
+        <button type="button" class="btn btn-xs text-muted p-0 ms-1 border-0" onclick="toggleWallpaperMode(this)" title="Toggle Wallpaper Mode">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+        </button>
+    </div>
+
+    <script>
+    function toggleWallpaperMode(btn) {
+        if (!window.wallpaper) return;
+        const modes = ['default', 'ai', 'shopping', 'quiet'];
+        const current = window.wallpaper.mode || 'default';
+        const next = modes[(modes.indexOf(current) + 1) % modes.length];
+        window.wallpaper.setMode(next);
+        btn.parentElement.querySelector('span').textContent = 'Cosmos: ' + next.toUpperCase();
+    }
+    </script>
+</div>
+</body>
+</html>

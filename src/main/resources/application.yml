@@ -1,0 +1,65 @@
+server:
+  port: ${PORT:${SERVER_PORT:8080}}
+  servlet:
+    session:
+      timeout: 30m
+
+spring:
+  application:
+    name: omnimart-ai
+  datasource:
+    url: jdbc:h2:mem:omnimartdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;NON_KEYWORDS=USER,VALUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+  thymeleaf:
+    cache: false
+    mode: HTML
+
+# AI Provider Configuration
+ai:
+  provider: ${AI_PROVIDER:nvidia}
+  nvidia:
+    api-keys: ${NVIDIA_API_KEYS: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,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,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}
+    api-key: ${NVIDIA_API_KEY:}
+    base-url: ${NVIDIA_BASE_URL:https://integrate.api.nvidia.com/v1}
+    model: ${NVIDIA_MODEL:nvidia/nemotron-3-ultra-550b-a55b}
+    temperature: 0.2
+    max-tokens: 2048
+  local:
+    base-url: ${LOCAL_AI_BASE_URL:http://localhost:8000/v1}
+    model: ${LOCAL_AI_MODEL:nvidia/nemotron-3-nano-30b-a3b}
+    temperature: 0.2
+  recommendation:
+    weights:
+      user-preference: 0.35
+      behavioral-similarity: 0.25
+      content-relevance: 0.20
+      rating: 0.10
+      popularity: 0.10
+
+# Brevo (Sendinblue) Transactional Email & Notifications Configuration
+brevo:
+  api-key: ${BREVO_API_KEY:}
+  sender:
+    email: ${BREVO_SENDER_EMAIL:support@omnimart-ai.com}
+    name: ${BREVO_SENDER_NAME:OmniMart AI}
+
+logging:
+  level:
+    com.example.aistore: INFO
+    org.springframework.security: WARN

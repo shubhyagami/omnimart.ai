@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head(${category.name})}"></head>
+<body>
+<header th:replace="~{fragments/header :: navbar}"></header>
+
+<main class="container py-4">
+    <!-- Category Banner Header -->
+    <div class="p-4 mb-4 bg-white rounded-3 shadow-sm border">
+        <div class="d-flex align-items-center gap-3">
+            <div class="fs-1 text-primary">
+                <i th:class="'fa-solid ' + ${category.icon}"></i>
+            </div>
+            <div>
+                <h2 class="fw-bold mb-1" th:text="${category.name}">Category Name</h2>
+                <p class="text-muted mb-0" th:text="${category.description}">Category description</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="row">
+        <th:block th:each="product : ${products}">
+            <div th:replace="~{fragments/product-card :: card(${product})}"></div>
+        </th:block>
+    </div>
+</main>
+
+<div th:replace="~{fragments/chat-widget :: chatWidget}"></div>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

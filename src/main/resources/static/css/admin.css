@@ -1,0 +1,106 @@
+/* Admin AI Dashboard Styles */
+.omni-admin-stat-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.omni-admin-stat-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+.omni-stat-blue { background: #eff6ff; color: #2563eb; }
+.omni-stat-green { background: #f0fdf4; color: #16a34a; }
+.omni-stat-purple { background: #faf5ff; color: #9333ea; }
+.omni-stat-amber { background: #fffbeb; color: #d97706; }
+
+.omni-admin-stat-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.2;
+}
+.omni-admin-stat-label {
+  font-size: 0.8rem;
+  color: #64748b;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.omni-admin-card {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+.omni-admin-card-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.omni-admin-card-title {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #0f172a;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.omni-sentiment-badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.sentiment-positive { background: #dcfce7; color: #15803d; }
+.sentiment-negative { background: #fee2e2; color: #b91c1c; }
+.sentiment-mixed { background: #fef3c7; color: #b45309; }
+.sentiment-neutral { background: #f1f5f9; color: #475569; }
+
+/* Admin AI Chat Console */
+.omni-admin-ai-console {
+  background: #0f172a;
+  color: #f8fafc;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+}
+.omni-admin-ai-input {
+  background: #1e293b;
+  border: 1px solid #334155;
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 10px 16px;
+  width: 100%;
+}
+.omni-admin-ai-input:focus {
+  outline: none;
+  border-color: #6366f1;
+  background: #1e293b;
+  color: #fff;
+}
+.omni-admin-ai-response {
+  background: #1e293b;
+  border-left: 4px solid #6366f1;
+  padding: 14px 18px;
+  border-radius: 0 8px 8px 0;
+  margin-top: 14px;
+  font-size: 0.92rem;
+  line-height: 1.6;
+}

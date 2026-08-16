@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('AI Product Comparison Matrix')}"></head>
+<body>
+<header th:replace="~{fragments/header :: navbar}"></header>
+
+<main class="container py-4">
+    <!-- Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1"><i class="fa-solid fa-scale-balanced text-warning me-2"></i>AI Product Comparison</h2>
+            <p class="text-muted small mb-0">Direct side-by-side hardware spec breakdown and AI verdict derived strictly from verified database records.</p>
+        </div>
+        <div>
+            <a th:href="@{/products}" class="btn btn-outline-primary btn-sm fw-bold">
+                <i class="fa-solid fa-plus me-1"></i> Add More Products to Compare
+            </a>
+        </div>
+    </div>
+
+    <!-- Empty State -->
+    <div th:if="${#lists.isEmpty(comparison.products)}" class="card border-0 shadow-sm rounded-4 p-5 text-center bg-white mb-5">
+        <i class="fa-solid fa-scale-unbalanced fs-1 text-muted mb-3"></i>
+        <h4>No products selected for comparison</h4>
+        <p class="text-muted">Browse our catalog and click "Compare" on 2 to 4 products to view an instant AI breakdown.</p>
+        <div>
+            <a th:href="@{/products}" class="btn btn-warning fw-bold px-4">Browse Catalog</a>
+        </div>
+    </div>
+
+    <!-- Comparison Content -->
+    <div th:unless="${#lists.isEmpty(comparison.products)}">
+        <!-- AI Verdict Banner -->
+        <div class="card border-0 shadow-lg rounded-4 p-4 mb-4 border-start border-4 border-warning" style="background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(108, 124, 255, 0.25) !important; border-left: 5px solid #f59e0b !important;">
+            <div class="d-flex align-items-center gap-2 mb-2">
+                <i class="fa-solid fa-wand-magic-sparkles text-warning fs-5"></i>
+                <h5 class="fw-bold mb-0 text-white">AI Comparison Verdict</h5>
+            </div>
+            <p class="text-light opacity-90 mb-3" th:text="${comparison.aiSummary}">AI summary analysis</p>
+
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="p-3 rounded-3" style="background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(148, 163, 184, 0.15);">
+                        <span class="badge bg-success mb-2 px-2 py-1 fs-6"><i class="fa-solid fa-trophy me-1"></i> Best Overall</span>
+                        <p class="small text-light mb-0" th:text="${comparison.bestOverallExplanation}">Highest composite score</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3 rounded-3" style="background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(148, 163, 184, 0.15);">
+                        <span class="badge bg-primary mb-2 px-2 py-1 fs-6"><i class="fa-solid fa-lightbulb me-1"></i> Best Value for Money</span>
+                        <p class="small text-light mb-0" th:text="${comparison.bestValueExplanation}">Optimal feature-to-price ratio</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3 rounded-3" style="background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(148, 163, 184, 0.15);">
+                        <span class="badge bg-danger mb-2 px-2 py-1 fs-6"><i class="fa-solid fa-bolt-lightning me-1"></i> Best Performance</span>
+                        <p class="small text-light mb-0" th:text="${comparison.bestPerformanceExplanation}">Benchmark throughput leader</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Matrix Table -->
+        <div class="card border-0 shadow-lg rounded-4 p-4 mb-5" style="background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(108, 124, 255, 0.25) !important;">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover align-middle mb-0 omni-compare-table">
+                    <thead class="text-center">
+                        <tr>
+                            <th style="width: 22%; background: rgba(30, 41, 59, 0.95); color: #f8fafc;" class="text-start fs-6 fw-bold">
+                                <i class="fa-solid fa-list-check text-warning me-2"></i>Feature / Specification
+                            </th>
+                            <th th:each="prod : ${comparison.products}" style="width: 26%; background: rgba(15, 23, 42, 0.95);">
+                                <div class="p-2 rounded-3 mb-2" style="background: rgba(11, 17, 32, 0.7);">
+                                    <img th:src="${prod.primaryImageUrl}" th:alt="${prod.name}" class="img-fluid" style="max-height: 120px; object-fit: contain;"
+                                         onerror="this.src='https://placehold.co/120x120?text=Product'">
+                                </div>
+                                <h6 class="fw-bold mb-1">
+                                    <a th:href="@{/products/{id}(id=${prod.id})}" class="text-light text-decoration-none" th:text="${prod.name}">Product Name</a>
+                                </h6>
+                                <div class="fs-5 fw-bold text-warning mb-2" th:text="'₹' + ${prod.price != null ? #numbers.formatDecimal(prod.price, 1, 'COMMA', 0, 'POINT') : '0'}">₹49,999</div>
+                                
+                                <form th:action="@{/cart/add}" method="POST">
+                                    <input type="hidden" name="productId" th:value="${prod.id}">
+                                    <input type="hidden" name="quantity" value="1">
+                                    <button type="submit" class="btn btn-warning btn-sm fw-bold w-100 mb-1">
+                                        <i class="fa-solid fa-cart-plus me-1"></i> Add to Cart
+                                    </button>
+                                </form>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="specKey : ${comparison.specGroups}">
+                            <th style="background: rgba(30, 41, 59, 0.85); color: #93c5fd; font-weight: 700;" class="text-start" th:text="${specKey}">Spec Group</th>
+                            <td th:each="prod : ${comparison.products}" class="text-center" style="background: rgba(15, 23, 42, 0.75); color: #f1f5f9;">
+                                <span class="fw-semibold text-light fs-6" th:text="${comparison.specMatrix.get(specKey).get(prod.id) != null ? comparison.specMatrix.get(specKey).get(prod.id) : '—'}">—</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{fragments/chat-widget :: chatWidget}"></div>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

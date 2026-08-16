@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head('Order Details')}"></head>
+<body>
+<header th:replace="~{fragments/header :: navbar}"></header>
+
+<main class="container py-4">
+    <div th:if="${isNewOrder}" class="alert alert-success p-4 rounded-4 shadow-sm mb-4">
+        <h4 class="fw-bold"><i class="fa-solid fa-circle-check text-success me-2"></i>Order Placed Successfully!</h4>
+        <p class="mb-0">Thank you for your purchase. We have received your order and are processing it for shipment.</p>
+    </div>
+
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Order Details</h2>
+            <small class="text-muted">Order #<span th:text="${order.orderNumber}">ORD-123</span> | Placed on <span th:text="${#temporals.format(order.createdAt, 'dd MMM yyyy, hh:mm a')}">15 Aug 2026</span></small>
+        </div>
+        <div class="d-flex gap-2">
+            <a th:href="@{/orders/{id}/tracking(id=${order.id})}" class="btn btn-primary fw-bold">
+                <i class="fa-solid fa-location-arrow me-1"></i> Track Order
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Left: Items & Delivery Status -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold mb-0">Items Ordered</h5>
+                    <span class="badge px-3 py-2"
+                          th:classappend="${order.status.name() == 'DELIVERED' ? 'bg-success' : (order.status.name() == 'CANCELLED' ? 'bg-danger' : 'bg-primary')}"
+                          th:text="${order.status}">CONFIRMED</span>
+                </div>
+
+                <div th:each="item : ${order.items}" class="row align-items-center py-3 border-bottom g-3">
+                    <div class="col-3 col-md-2 text-center">
+                        <img th:src="${item.productImageUrl}" th:alt="${item.productName}" class="img-fluid rounded" style="max-height: 80px; object-fit: contain;"
+                             onerror="this.src='https://placehold.co/100x100?text=Product'">
+                    </div>
+                    <div class="col-6 col-md-7">
+                        <h6 class="fw-bold mb-1">
+                            <a th:href="@{/products/{id}(id=${item.product.id})}" class="text-dark text-decoration-none" th:text="${item.productName}">Product Name</a>
+                        </h6>
+                        <small class="text-muted">Qty: <strong th:text="${item.quantity}">1</strong> | Unit Price: <strong th:text="'₹' + ${#numbers.formatDecimal(item.unitPrice, 0, 'COMMA', 0, 'POINT')}">₹49,999</strong></small>
+                    </div>
+                    <div class="col-3 col-md-3 text-end fw-bold fs-5 text-dark" th:text="'₹' + ${#numbers.formatDecimal(item.totalPrice, 0, 'COMMA', 0, 'POINT')}">
+                        ₹49,999
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cancellation / Return Actions -->
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white" th:if="${order.status.name() != 'CANCELLED'}">
+                <h5 class="fw-bold mb-3">Manage Order</h5>
+                
+                <!-- Cancel Order Form (if not delivered) -->
+                <div th:if="${order.status.name() != 'DELIVERED'}">
+                    <form th:action="@{/orders/{id}/cancel(id=${order.id})}" method="POST" onsubmit="return confirm('Are you sure you want to cancel this order?')">
+                        <div class="mb-2">
+                            <label class="form-label small text-muted">Reason for Cancellation</label>
+                            <input type="text" name="reason" class="form-control form-control-sm" placeholder="Order created by mistake / Found cheaper elsewhere" required>
+                        </div>
+                        <button type="submit" class="btn btn-outline-danger btn-sm fw-bold">Cancel Order</button>
+                    </form>
+                </div>
+
+                <!-- Return Request Form (if delivered) -->
+                <div th:if="${order.status.name() == 'DELIVERED'}">
+                    <form th:action="@{/orders/{id}/return(id=${order.id})}" method="POST">
+                        <div class="mb-2">
+                            <label class="form-label small text-muted">Reason for Return</label>
+                            <input type="text" name="returnReason" class="form-control form-control-sm" placeholder="Hardware issue / Battery drain / Defective item" required>
+                        </div>
+                        <button type="submit" class="btn btn-outline-warning text-dark btn-sm fw-bold">Request 7-Day Replacement/Return</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Shipping Address & Payment Summary -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+                <h6 class="fw-bold text-muted text-uppercase mb-3" style="font-size: 0.8rem;">Shipping Address</h6>
+                <div th:if="${order.shippingAddress != null}">
+                    <strong class="d-block text-dark" th:text="${order.shippingAddress.fullName}">Rahul Sharma</strong>
+                    <div class="text-muted small" th:text="${order.shippingAddress.streetAddress}">Flat 402, Cyber Heights</div>
+                    <div class="text-muted small" th:text="${order.shippingAddress.city + ', ' + order.shippingAddress.state + ' - ' + order.shippingAddress.postalCode}">Gurugram, Haryana - 122001</div>
+                    <div class="text-muted small" th:text="${order.shippingAddress.country}">India</div>
+                    <div class="text-muted small mt-1">Phone: <span th:text="${order.shippingAddress.phone}">+91 98000 00000</span></div>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+                <h6 class="fw-bold text-muted text-uppercase mb-3" style="font-size: 0.8rem;">Payment Summary</h6>
+                <div class="d-flex justify-content-between mb-2 small text-muted">
+                    <span>Items Subtotal:</span>
+                    <span class="fw-semibold text-dark" th:text="'₹' + ${#numbers.formatDecimal(order.totalAmount, 0, 'COMMA', 0, 'POINT')}">₹49,999</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2 small text-muted">
+                    <span>Shipping:</span>
+                    <span class="text-success fw-bold">FREE</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2 small text-muted">
+                    <span>GST / Taxes:</span>
+                    <span class="fw-semibold text-dark" th:text="'₹' + ${#numbers.formatDecimal(order.taxAmount, 0, 'COMMA', 0, 'POINT')}">₹8,999</span>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="fw-bold fs-5 text-dark">Grand Total:</span>
+                    <span class="fw-bold fs-4 text-dark" th:text="'₹' + ${#numbers.formatDecimal(order.finalAmount, 0, 'COMMA', 0, 'POINT')}">₹58,998</span>
+                </div>
+                <div class="p-2 bg-light rounded text-center small text-muted">
+                    Paid via <strong th:text="${order.payment != null ? order.payment.paymentMethod : 'CREDIT_CARD'}">CREDIT_CARD</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{fragments/chat-widget :: chatWidget}"></div>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>
