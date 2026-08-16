@@ -57,7 +57,7 @@ ai:
 brevo:
   api-key: ${BREVO_API_KEY:}
   sender:
-    email: ${BREVO_SENDER_EMAIL:support@omnimart-ai.com}
+    email: ${BREVO_SENDER_EMAIL:shubhkumarsinha192@gmail.com}
     name: ${BREVO_SENDER_NAME:OmniMart AI}
 
 logging:

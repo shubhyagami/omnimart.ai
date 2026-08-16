@@ -25,6 +25,6 @@ services:
       - key: BREVO_API_KEY
         sync: false
       - key: BREVO_SENDER_EMAIL
-        value: support@omnimart-ai.com
+        value: shubhkumarsinha192@gmail.com
       - key: BREVO_SENDER_NAME
         value: OmniMart AI

@@ -23,20 +23,62 @@ public class BrevoEmailService {
 
     public BrevoEmailService(
             @Value("${brevo.api-key:}") String apiKey,
-            @Value("${brevo.sender.email:support@omnimart-ai.com}") String senderEmail,
+            @Value("${brevo.sender.email:shubhkumarsinha192@gmail.com}") String senderEmail,
             @Value("${brevo.sender.name:OmniMart AI}") String senderName,
             ObjectMapper objectMapper
     ) {
-        this.apiKey = apiKey != null ? apiKey.trim() : "";
-        this.senderEmail = senderEmail;
-        this.senderName = senderName;
+        this.apiKey = sanitizeApiKey(apiKey);
+        this.senderEmail = (senderEmail != null && !senderEmail.isBlank()) ? senderEmail.trim() : "shubhkumarsinha192@gmail.com";
+        this.senderName = (senderName != null && !senderName.isBlank()) ? senderName.trim() : "OmniMart AI";
         this.objectMapper = objectMapper;
         this.webClient = WebClient.builder()
                 .baseUrl("https://api.brevo.com/v3")
-                .defaultHeader("api-key", this.apiKey)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .build();
+    }
+
+    /**
+     * Sanitizes and extracts the pure Brevo API key (handling raw keys, base64-encoded JSON, or wrapped tokens).
+     */
+    public static String sanitizeApiKey(String key) {
+        if (key == null) return "";
+        key = key.trim();
+        if (key.startsWith("\"") && key.endsWith("\"") && key.length() > 2) {
+            key = key.substring(1, key.length() - 1).trim();
+        }
+        if (key.startsWith("'") && key.endsWith("'") && key.length() > 2) {
+            key = key.substring(1, key.length() - 1).trim();
+        }
+        if (key.startsWith("ey")) {
+            try {
+                byte[] decoded = Base64.getDecoder().decode(key);
+                String json = new String(decoded, java.nio.charset.StandardCharsets.UTF_8);
+                if (json.contains("api_key")) {
+                    int start = json.indexOf("api_key") + 7;
+                    start = json.indexOf("xkeysib-", start);
+                    if (start != -1) {
+                        int end = json.indexOf("\"", start);
+                        if (end != -1) {
+                            return json.substring(start, end).trim();
+                        }
+                    }
+                }
+            } catch (Exception ignored) {}
+        }
+        if (key.contains("xkeysib-")) {
+            int start = key.indexOf("xkeysib-");
+            int end = key.length();
+            for (int i = start; i < key.length(); i++) {
+                char c = key.charAt(i);
+                if (c == '"' || c == '\'' || c == '}' || c == ' ' || c == '\n' || c == '\r') {
+                    end = i;
+                    break;
+                }
+            }
+            return key.substring(start, end).trim();
+        }
+        return key;
     }
 
     /**
@@ -186,6 +228,19 @@ public class BrevoEmailService {
      * Executes the HTTP request to Brevo Transactional Email endpoint.
      */
     public boolean sendTransactionalEmail(String toEmail, String toName, String subject, String htmlContent) {
+        String effectiveApiKey = this.apiKey;
+        if (effectiveApiKey == null || effectiveApiKey.isBlank()) {
+            effectiveApiKey = sanitizeApiKey(System.getenv("BREVO_API_KEY"));
+        }
+        if (effectiveApiKey == null || effectiveApiKey.isBlank()) {
+            effectiveApiKey = sanitizeApiKey(System.getProperty("brevo.api-key"));
+        }
+
+        if (effectiveApiKey == null || effectiveApiKey.isBlank()) {
+            log.warn("Brevo API key is not configured. Email to {} simulated. Set BREVO_API_KEY to send live emails.", toEmail);
+            return false;
+        }
+
         try {
             Map<String, Object> payload = new HashMap<>();
             payload.put("sender", Map.of("name", senderName, "email", senderEmail));
@@ -193,20 +248,21 @@ public class BrevoEmailService {
             payload.put("subject", subject);
             payload.put("htmlContent", htmlContent);
 
-            log.info("Sending transactional email via Brevo API to: {} | Subject: '{}'", toEmail, subject);
+            log.info("Sending transactional email via Brevo API to: {} | From: <{}> | Subject: '{}'", toEmail, senderEmail, subject);
 
             String response = webClient.post()
                     .uri("/smtp/email")
+                    .header("api-key", effectiveApiKey)
                     .bodyValue(payload)
                     .retrieve()
                     .bodyToMono(String.class)
                     .timeout(Duration.ofSeconds(10))
                     .block();
 
-            log.info("Brevo API Email dispatched successfully. Response: {}", response);
+            log.info("Brevo API Email dispatched successfully to {}. Response: {}", toEmail, response);
             return true;
         } catch (Exception e) {
-            log.warn("Brevo API call was not processed by remote server: {}. (If IP whitelisting is active in Brevo, authorize the IP at https://app.brevo.com/security/authorised_ips).", e.getMessage());
+            log.warn("Brevo API call was not processed by remote server: {}. (Check if sender '{}' is verified in Brevo, or check authorized IPs at https://app.brevo.com/security/authorised_ips).", e.getMessage(), senderEmail);
             return false;
         }
     }
