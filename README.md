@@ -30,31 +30,32 @@
 - [Deployment](#deployment)
 - [Demo Accounts](#demo-accounts)
 - [Environment Variables](#environment-variables)
+- [Changelog](#changelog)
 
 ---
 
 ## Overview
 
-OmniMart AI is a next-generation e-commerce platform integrating an autonomous AI shopping assistant, hyper-personalized recommendations, and interactive UI elements. Built with Spring Boot 3 and a hybrid recommendation engine, it strictly enforces database-grounded AI responses to eliminate hallucinations.
+OmniMart AI is an e-commerce platform featuring an autonomous AI shopping assistant, hyper-personalized recommendations, and an interactive user interface. Built with Spring Boot 3 and a hybrid recommendation engine, it strictly enforces database-grounded AI responses to eliminate hallucinations and ensure accurate product retrieval.
 
 ## Key Features
 
-1. **Procedural HTML5 Canvas Live Wallpaper**  
-   Deep vector doodle engine rendering futuristic tech and e-commerce artifacts (smartphones, gaming rigs, delivery pods, AI neural nodes, microchips). Features a 3-layer parallax depth with physics-based proximity repulsion, glowing cursor auras, and dynamic constellation lines. Background doodles highlight in amber when products are suggested by the AI.
+- **Procedural HTML5 Canvas Live Wallpaper**  
+  A vector rendering engine that draws futuristic tech and e-commerce artifacts (smartphones, gaming rigs, delivery pods, AI neural nodes, and microchips). It features a 3-layer parallax depth effect with physics-based proximity repulsion, glowing cursor auras, and dynamic constellation lines. Background doodles highlight in amber when products are suggested by the AI.
 
-2. **Fluid Animated Shopping Cursor**  
-   Glowing amber cursor with a fluid trailing ring and magnetic physics. Morphs into an animated bouncing shopping bag over actionable buttons and triggers a multicolored particle burst on clicks.
+- **Fluid Animated Shopping Cursor**  
+  A glowing amber cursor with a fluid trailing ring and magnetic physics. It morphs into an animated bouncing shopping bag over actionable buttons and triggers a multicolored particle burst on clicks.
 
-3. **Autonomous Agentic AI Shopping Assistant**  
-   Powered by NVIDIA Nemotron-3-Ultra, the assistant queries real database inventory via structured safe tools (`toolRouter.searchProducts`). Ensures categorically accurate retrieval (e.g., *"gaming laptops"* return verified high-refresh GPU laptops). Supports context-aware multi-turn conversational memory.
+- **Autonomous Agentic AI Shopping Assistant**  
+  Powered by NVIDIA Nemotron-3-Ultra, the assistant queries real database inventory via structured, safe tools (`toolRouter.searchProducts`). This ensures categorically accurate retrieval (e.g., searching for *"gaming laptops"* returns verified high-refresh GPU laptops). It supports context-aware, multi-turn conversational memory.
 
-4. **Multi-Factor Hybrid Recommendation Engine**  
-   Weighted ranking algorithm calculating a score based on:
-   $$\text{Score} = 0.35 \times \text{UserPreference} + 0.25 \times \text{BehavioralSim} + 0.20 \times \text{ContentRelevance} + 0.10 \times \text{Rating} + 0.10 \times \text{Popularity}$$
-   Includes explainable *"Why this product?"* badges on every card.
+- **Multi-Factor Hybrid Recommendation Engine**  
+  A weighted ranking algorithm calculates a product score based on:
+  $$\text{Score} = 0.35 \times \text{UserPreference} + 0.25 \times \text{BehavioralSim} + 0.20 \times \text{ContentRelevance} + 0.10 \times \text{Rating} + 0.10 \times \text{Popularity}$$
+  Each recommendation card includes an explainable *"Why this product?"* badge.
 
-5. **Customer Feedback Sentiment & Emotion Intelligence**  
-   Deep sentiment extraction across customer reviews, classifying topics (*Battery, Display, Camera, Performance, Delivery*). Displays real-time Chart.js visual analytics in the Executive Admin Dashboard.
+- **Customer Feedback Sentiment & Emotion Intelligence**  
+  Performs deep sentiment extraction across customer reviews, classifying topics into categories like *Battery, Display, Camera, Performance, and Delivery*. The Executive Admin Dashboard displays real-time Chart.js visual analytics based on this data.
 
 ## AI Architecture & Guardrails
 
@@ -83,7 +84,7 @@ graph TD
 ### Core AI Guardrails
 - **Zero Hallucination Guarantee**: Product recommendations and spec comparisons pull candidate items strictly from JPA database queries.
 - **No Raw SQL Execution**: Natural language queries are transformed into structured criteria without executing untrusted strings.
-- **Sequential Multi-Key Fallback**: Automatic failover between NVIDIA API keys with instant fallback to the local deterministic engine on network timeouts.
+- **Sequential Multi-Key Fallback**: Automatic failover between NVIDIA API keys, with instant fallback to the local deterministic engine on network timeouts.
 
 ## Dynamic UI & Particle Engine
 
@@ -112,9 +113,9 @@ graph TD
 
 ## AI Comparison Matrix
 
-- Multi-product comparator supporting up to 4 simultaneous items.
-- Hardware matrix covering: **Processor, RAM, Storage, Display, Battery, Camera, OS, and Price**.
-- Automated AI verdict banner highlighting:
+- **Multi-Product Comparator**: Supports comparing up to 4 simultaneous items.
+- **Hardware Matrix**: Covers Processor, RAM, Storage, Display, Battery, Camera, OS, and Price.
+- **Automated AI Verdict Banner**: Highlights the following categories:
   - 🏆 **Best Overall**: Highest composite hardware score.
   - 💡 **Best Value for Money**: Optimal feature-to-price ratio.
   - ⚡ **Best Performance**: Peak throughput and benchmark leader.
@@ -123,12 +124,15 @@ graph TD
 
 ## Getting Started
 
-### Prerequisites
+Ensure you have the following prerequisites installed on your system before running the application:
 - **Java 21** or later (`java -version`)
 - **Maven 3.9+** (or use the included `mvnw` wrapper)
 - **Docker** (optional, for containerized deployment)
 
 ### 1. Run Locally with Maven Wrapper
+
+Clone the repository and start the application using the provided Maven wrapper:
+
 ```bash
 # Windows
 .\mvnw.cmd spring-boot:run
@@ -137,12 +141,15 @@ graph TD
 ./mvnw spring-boot:run
 ```
 
-Access the application at:
+Once running, access the application at:
 - **Storefront**: [http://localhost:8080](http://localhost:8080)
 - **H2 DB Console**: [http://localhost:8080/h2-console](http://localhost:8080/h2-console)  
   *(JDBC URL: `jdbc:h2:mem:omnimartdb`, User: `sa`, Password: `""`)*
 
 ### 2. Build and Run with Docker
+
+To run the application in an isolated Docker container, build the multi-stage image and map the ports:
+
 ```bash
 # Build multi-stage Docker image
 docker build -t omnimart-ai:latest .
@@ -197,6 +204,18 @@ Click **"🔑 Demo Account Credentials"** on the `/login` page to auto-fill cred
 | `BREVO_API_KEY` | *Configured Key* | Brevo Transactional Email API Key |
 | `BREVO_SENDER_EMAIL` | `support@omnimart-ai.com` | Verified sender address |
 | `BREVO_SENDER_NAME` | `OmniMart AI` | Email sender name |
+
+---
+
+## Changelog
+
+### v1.0.0 - 2026-08-20
+- **Initial Release**
+- Implemented core Spring Boot 3 backend with Java 21.
+- Integrated NVIDIA Nemotron-3-Ultra autonomous shopping assistant with multi-turn memory.
+- Added hybrid recommendation engine with five-factor weighted scoring.
+- Built procedural HTML5 canvas live wallpaper and fluid animated cursor mechanics.
+- Reached 100% database-grounded AI guardrails (Zero Hallucination Guarantee).
 
 ---
 
