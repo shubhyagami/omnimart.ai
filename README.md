@@ -1,3 +1,6 @@
+-------------
+
+
 <div align="center">
 
 # 🌌 OmniMart AI
@@ -11,14 +14,14 @@
 [![Brevo](https://img.shields.io/badge/Brevo-Transactional%20OTP-0B99FF?style=for-the-badge&logo=brevo&logoColor=white)](https://www.brevo.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
-**Architected by [Shubh Kumar](https://github.com/shubhyagami)**  
-*© 2026 OmniMart AI Technologies Inc. All rights reserved.*
+**Architected by [Shubh Kumar](https://github.com/shubhyagami)**
 
 </div>
 
 ---
 
-## 📑 Table of Contents
+## Table of Contents
+
 - [Overview](#overview)
 - [Key Features](#key-features)
 - [AI Architecture & Guardrails](#ai-architecture--guardrails)
@@ -40,24 +43,21 @@ OmniMart AI is an e-commerce platform featuring an autonomous AI shopping assist
 
 ## Key Features
 
-- **Procedural HTML5 Canvas Live Wallpaper**  
-  A vector rendering engine that draws futuristic tech and e-commerce artifacts (smartphones, gaming rigs, delivery pods, AI neural nodes, and microchips). It features a 3-layer parallax depth effect with physics-based proximity repulsion, glowing cursor auras, and dynamic constellation lines. Background doodles highlight in amber when products are suggested by the AI.
+OmniMart AI showcases several innovative features, including:
 
-- **Fluid Animated Shopping Cursor**  
-  A glowing amber cursor with a fluid trailing ring and magnetic physics. It morphs into an animated bouncing shopping bag over actionable buttons and triggers a multicolored particle burst on clicks.
-
-- **Autonomous Agentic AI Shopping Assistant**  
-  Powered by NVIDIA Nemotron-3-Ultra, the assistant queries real database inventory via structured, safe tools (`toolRouter.searchProducts`). This ensures categorically accurate retrieval (e.g., searching for *"gaming laptops"* returns verified high-refresh GPU laptops). It supports context-aware, multi-turn conversational memory.
-
-- **Multi-Factor Hybrid Recommendation Engine**  
-  A weighted ranking algorithm calculates a product score based on:
-  $$\text{Score} = 0.35 \times \text{UserPreference} + 0.25 \times \text{BehavioralSim} + 0.20 \times \text{ContentRelevance} + 0.10 \times \text{Rating} + 0.10 \times \text{Popularity}$$
-  Each recommendation card includes an explainable *"Why this product?"* badge.
-
-- **Customer Feedback Sentiment & Emotion Intelligence**  
-  Performs deep sentiment extraction across customer reviews, classifying topics into categories like *Battery, Display, Camera, Performance, and Delivery*. The Executive Admin Dashboard displays real-time Chart.js visual analytics based on this data.
+*   **AI-Powered Shopping Assistant**: Leveraging NVIDIA Nemotron-3-Ultra, this assistant provides a conversational interface for users to explore and discover products.
+*   **Hybrid Recommendation Engine**: Combining user preferences, behavioral patterns, content relevance, ratings, and popularity, this engine delivers accurate and highly relevant recommendations.
+*   **Customer Feedback Sentiment & Emotion Intelligence**: Analyzing customer reviews, this feature extracts deep sentiment and classifies topics, providing valuable insights for business optimization.
+*   **Procedural HTML5 Canvas Live Wallpaper**: Featuring a vector rendering engine, parallax effect, and glow, this dynamic wallpaper is an engaging and immersive experience.
+*   **Interactive Cursor with Particle Effects**: A fluid animated shopping cursor with a magnetic trailing ring and particle bursts on clicks, adding an engaging visual touch to the user interface.
 
 ## AI Architecture & Guardrails
+
+Our AI architecture ensures accuracy and reliability through:
+
+*   **Zero Hallucination Guarantee**: Database-grounded AI responses eliminate potential hallucinations, ensuring accurate product retrieval.
+*   **No Raw SQL Execution**: Natural language queries are transformed into structured criteria without executing untrusted strings.
+*   **Sequential Multi-Key Fallback**: Automatic failover between NVIDIA API keys ensures seamless operation in case of network timeouts.
 
 ```mermaid
 graph TD
@@ -81,12 +81,9 @@ graph TD
     FeedbackService --> DB
 ```
 
-### Core AI Guardrails
-- **Zero Hallucination Guarantee**: Product recommendations and spec comparisons pull candidate items strictly from JPA database queries.
-- **No Raw SQL Execution**: Natural language queries are transformed into structured criteria without executing untrusted strings.
-- **Sequential Multi-Key Fallback**: Automatic failover between NVIDIA API keys, with instant fallback to the local deterministic engine on network timeouts.
-
 ## Dynamic UI & Particle Engine
+
+Our interactive interface features:
 
 | Component | Visual Feature | Implementation |
 |---|---|---|
@@ -98,40 +95,35 @@ graph TD
 
 ## Network Geolocation & Mini-Map
 
-- **Automatic Network Triangulation**: Determines City, State, Country, and Postal Code using public IP intelligence without requiring browser GPS permissions.
-- **Navbar Delivery Pill**: Shows live destination (e.g., `Kolkata • 700009` or `Gurugram • 122001`).
-- **Interactive Leaflet Mini-Map**: Centered on network coordinates with radar pulse animations and manual destination updates.
+Our platform leverages network geolocation to:
+
+*   **Automatically Determine Network Location**: City, State, Country, and Postal Code using public IP intelligence without requiring browser GPS permissions.
+*   **Show Live Destination**: Visualize the user's network location on a leaflet mini-map.
 
 ## Transactional Emails & OTP
 
-- **API Integration**: Connects securely via `https://api.brevo.com/v3/smtp/email`.
-- **Security Use-Cases**:
-  - 6-digit OTP verification for new user registration.
-  - 6-digit OTP verification for profile email changes.
-  - Rich HTML order receipts with tracking links and itemized invoice details.
-- **Email Compatibility**: Tested across Gmail, Apple Mail, and Outlook Dark Mode with inline table layouts.
+We securely send transactional emails using:
+
+*   **Brevo API Integration**: Connecting via `https://api.brevo.com/v3/smtp/email`.
+*   **Security-Enhanced Email Use-Cases**: Verify account creation, profile updates, and issue rich HTML order receipts with tracking links.
 
 ## AI Comparison Matrix
 
-- **Multi-Product Comparator**: Supports comparing up to 4 simultaneous items.
-- **Hardware Matrix**: Covers Processor, RAM, Storage, Display, Battery, Camera, OS, and Price.
-- **Automated AI Verdict Banner**: Highlights the following categories:
-  - 🏆 **Best Overall**: Highest composite hardware score.
-  - 💡 **Best Value for Money**: Optimal feature-to-price ratio.
-  - ⚡ **Best Performance**: Peak throughput and benchmark leader.
+*   **Multi-Product Comparator**: Compare up to 4 products simultaneously.
+*   **Hardware Matrix**: Compare Processor, RAM, Storage, Display, Battery, Camera, OS, and Price.
+*   **Automated AI Verdict Banner**: Highlight the top-performing products based on their composite scores.
 
 ---
 
 ## Getting Started
 
-Ensure you have the following prerequisites installed on your system before running the application:
-- **Java 21** or later (`java -version`)
-- **Maven 3.9+** (or use the included `mvnw` wrapper)
-- **Docker** (optional, for containerized deployment)
+Before running the application, ensure you have:
+
+*   **Java 21** or later installed on your system.
+*   **Maven 3.9+** or use the included `mvnw` wrapper.
+*   **Docker** for containerized deployment.
 
 ### 1. Run Locally with Maven Wrapper
-
-Clone the repository and start the application using the provided Maven wrapper:
 
 ```bash
 # Windows
@@ -141,14 +133,12 @@ Clone the repository and start the application using the provided Maven wrapper:
 ./mvnw spring-boot:run
 ```
 
-Once running, access the application at:
-- **Storefront**: [http://localhost:8080](http://localhost:8080)
-- **H2 DB Console**: [http://localhost:8080/h2-console](http://localhost:8080/h2-console)  
-  *(JDBC URL: `jdbc:h2:mem:omnimartdb`, User: `sa`, Password: `""`)*
+Access the application at:
+
+*   **Storefront**: [http://localhost:8080](http://localhost:8080)
+*   **H2 DB Console**: [http://localhost:8080/h2-console](http://localhost:8080/h2-console)
 
 ### 2. Build and Run with Docker
-
-To run the application in an isolated Docker container, build the multi-stage image and map the ports:
 
 ```bash
 # Build multi-stage Docker image
@@ -162,21 +152,23 @@ docker run -p 8080:8080 -e AI_PROVIDER=nvidia omnimart-ai:latest
 
 ## Deployment
 
-Deploy OmniMart AI to **Render** in under 3 minutes using Docker or Render Blueprints.
+Deploy OmniMart AI to **Render** using Docker or Render Blueprints.
 
 ### Option 1: Render Blueprint (`render.yaml`) — Recommended
-1. Fork or push this repository to GitHub.
-2. Log in to the [Render Dashboard](https://dashboard.render.com/).
-3. Click **New +** → **Blueprint**.
-4. Select your repository. Render will automatically detect `render.yaml` and configure the web service.
-5. Click **Apply**.
+
+1.  Fork or push this repository to GitHub.
+2.  Log in to the [Render Dashboard](https://dashboard.render.com/).
+3.  Click **New +** → **Blueprint**.
+4.  Select your repository.
+5.  Click **Apply**.
 
 ### Option 2: Deploy as a Docker Web Service
-1. In Render Dashboard, click **New +** → **Web Service**.
-2. Connect your GitHub repository.
-3. Choose **Docker** as the runtime.
-4. Set Environment Variables (see [Environment Variables](#environment-variables)).
-5. Click **Create Web Service**.
+
+1.  In Render Dashboard, click **New +** → **Web Service**.
+2.  Connect your GitHub repository.
+3.  Choose **Docker** as the runtime.
+4.  Set Environment Variables.
+5.  Click **Create Web Service**.
 
 > **Note**: The application is configured to automatically read Render's dynamic `$PORT` environment variable (`server.port: ${PORT:8080}`).
 
@@ -184,7 +176,7 @@ Deploy OmniMart AI to **Render** in under 3 minutes using Docker or Render Bluep
 
 ## Demo Accounts
 
-Click **"🔑 Demo Account Credentials"** on the `/login` page to auto-fill credentials with 1 click:
+Click **"🔑 Demo Account Credentials"** on the `/login` page to auto-fill credentials:
 
 | Role | Email | Password | Permissions |
 |---|---|---|---|
@@ -221,7 +213,6 @@ Click **"🔑 Demo Account Credentials"** on the `/login` page to auto-fill cred
 
 <div align="center">
 
-**Designed & Crafted by [Shubh Kumar](https://github.com/shubhyagami)**  
-*© 2026 OmniMart AI Technologies Inc. All rights reserved.*
+**Designed & Crafted by [Shubh Kumar](https://github.com/shubhyagami)**
 
 </div>
