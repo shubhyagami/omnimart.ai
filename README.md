@@ -39,17 +39,17 @@
 
 ## Overview
 
-OmniMart AI is an e-commerce platform that showcases an autonomous AI shopping assistant, hyper-personalized recommendations, and an interactive user interface. Built with Spring Boot 3 and a hybrid recommendation engine, it strictly enforces database-grounded AI responses to eliminate hallucinations and ensure accurate product retrieval.
+OmniMart AI is an advanced e-commerce platform that showcases an autonomous AI shopping assistant, hyper-personalized product recommendations, and an intuitive user interface. Built with Spring Boot 3 and a hybrid recommendation engine, it ensures accurate and reliable AI responses by enforcing database-grounded AI guardrails.
 
 ## Key Features
 
 OmniMart AI features several innovative aspects, including:
 
-*   **AI-Powered Shopping Assistant**: This assistant leverages NVIDIA Nemotron-3-Ultra to provide a conversational interface for users to explore and discover products.
-*   **Hybrid Recommendation Engine**: This engine combines user preferences, behavioral patterns, content relevance, ratings, and popularity to deliver accurate and highly relevant recommendations.
-*   **Customer Feedback Sentiment & Emotion Intelligence**: This feature analyzes customer reviews to extract deep sentiment and classify topics, providing valuable insights for business optimization.
-*   **Procedural HTML5 Canvas Live Wallpaper**: This feature includes a vector rendering engine, parallax effect, and glow, creating an engaging and immersive experience.
-*   **Interactive Cursor with Particle Effects**: This feature adds an engaging visual touch to the user interface with a fluid animated shopping cursor and particle bursts on clicks.
+*   **AI-Powered Shopping Assistant**: Provides a conversational interface for users to explore and discover products using NVIDIA Nemotron-3-Ultra.
+*   **Hybrid Recommendation Engine**: Combines user preferences, behavioral patterns, content relevance, ratings, and popularity to deliver accurate and highly relevant product recommendations.
+*   **Customer Feedback Sentiment & Emotion Intelligence**: Analyzes customer reviews to extract deep sentiment and classify topics, providing valuable insights for business optimization.
+*   **Procedural HTML5 Canvas Live Wallpaper**: Offers a vector rendering engine, parallax effect, and glow, creating an engaging and immersive experience.
+*   **Interactive Cursor with Particle Effects**: Adds an engaging visual touch to the user interface with a fluid animated shopping cursor and particle bursts on clicks.
 
 ## AI Architecture & Guardrails
 
@@ -154,7 +154,7 @@ docker run -p 8080:8080 -e AI_PROVIDER=nvidia omnimart-ai:latest
 
 Deploy OmniMart AI to **Render** using Docker or Render Blueprints.
 
-### Option 1: Render Blueprint (`render.yaml`) — Recommended
+### Option 1: Render Blueprint (`render.yaml`) 
 
 1.  Fork or push this repository to GitHub.
 2.  Log in to the [Render Dashboard](https://dashboard.render.com/).
@@ -162,7 +162,7 @@ Deploy OmniMart AI to **Render** using Docker or Render Blueprints.
 4.  Select your repository.
 5.  Click **Apply**.
 
-### Option 2: Deploy as a Docker Web Service
+### Option 2: Deploy as a Docker Web Service 
 
 1.  In Render Dashboard, click **New +** → **Web Service**.
 2.  Connect your GitHub repository.
