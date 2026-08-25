@@ -39,17 +39,17 @@
 
 ## Overview
 
-OmniMart AI is an e-commerce platform featuring an autonomous AI shopping assistant, hyper-personalized recommendations, and an interactive user interface. Built with Spring Boot 3 and a hybrid recommendation engine, it strictly enforces database-grounded AI responses to eliminate hallucinations and ensure accurate product retrieval.
+OmniMart AI is an e-commerce platform that showcases an autonomous AI shopping assistant, hyper-personalized recommendations, and an interactive user interface. Built with Spring Boot 3 and a hybrid recommendation engine, it strictly enforces database-grounded AI responses to eliminate hallucinations and ensure accurate product retrieval.
 
 ## Key Features
 
-OmniMart AI showcases several innovative features, including:
+OmniMart AI features several innovative aspects, including:
 
-*   **AI-Powered Shopping Assistant**: Leveraging NVIDIA Nemotron-3-Ultra, this assistant provides a conversational interface for users to explore and discover products.
-*   **Hybrid Recommendation Engine**: Combining user preferences, behavioral patterns, content relevance, ratings, and popularity, this engine delivers accurate and highly relevant recommendations.
-*   **Customer Feedback Sentiment & Emotion Intelligence**: Analyzing customer reviews, this feature extracts deep sentiment and classifies topics, providing valuable insights for business optimization.
-*   **Procedural HTML5 Canvas Live Wallpaper**: Featuring a vector rendering engine, parallax effect, and glow, this dynamic wallpaper is an engaging and immersive experience.
-*   **Interactive Cursor with Particle Effects**: A fluid animated shopping cursor with a magnetic trailing ring and particle bursts on clicks, adding an engaging visual touch to the user interface.
+*   **AI-Powered Shopping Assistant**: This assistant leverages NVIDIA Nemotron-3-Ultra to provide a conversational interface for users to explore and discover products.
+*   **Hybrid Recommendation Engine**: This engine combines user preferences, behavioral patterns, content relevance, ratings, and popularity to deliver accurate and highly relevant recommendations.
+*   **Customer Feedback Sentiment & Emotion Intelligence**: This feature analyzes customer reviews to extract deep sentiment and classify topics, providing valuable insights for business optimization.
+*   **Procedural HTML5 Canvas Live Wallpaper**: This feature includes a vector rendering engine, parallax effect, and glow, creating an engaging and immersive experience.
+*   **Interactive Cursor with Particle Effects**: This feature adds an engaging visual touch to the user interface with a fluid animated shopping cursor and particle bursts on clicks.
 
 ## AI Architecture & Guardrails
 
@@ -72,9 +72,9 @@ graph TD
     ToolRouter --> FeedbackService[Customer Feedback Intelligence]
     
     AIOrch --> ProviderSwitch[AI Provider Layer]
-    ProviderSwitch --> Nvidia[NvidiaAIProvider Nemotron-3-Ultra]
-    ProviderSwitch --> LocalAI[LocalAIProvider vLLM / Ollama]
-    ProviderSwitch --> MockAI[MockAIProvider Deterministic Spec Engine]
+    ProviderSwitch --> Nvidia[NVIDIA AI Provider]
+    ProviderSwitch --> LocalAI[Local AI Provider]
+    ProviderSwitch --> MockAI[Mock AI Provider]
     
     ProductService --> DB[(H2 Database / MySQL)]
     PreferenceService --> DB
@@ -135,8 +135,8 @@ Before running the application, ensure you have:
 
 Access the application at:
 
-*   **Storefront**: [http://localhost:8080](http://localhost:8080)
-*   **H2 DB Console**: [http://localhost:8080/h2-console](http://localhost:8080/h2-console)
+*   **Storefront**: <http://localhost:8080/>
+*   **H2 DB Console**: <http://localhost:8080/h2-console/>
 
 ### 2. Build and Run with Docker
 
@@ -216,3 +216,4 @@ Click **"🔑 Demo Account Credentials"** on the `/login` page to auto-fill cred
 **Designed & Crafted by [Shubh Kumar](https://github.com/shubhyagami)**
 
 </div>
+-------------
