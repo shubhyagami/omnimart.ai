@@ -1,129 +1,76 @@
--------------
-
-
 <div align="center">
 
-# 🌌 OmniMart AI
+# 🌌 OmniMart AI  
 
-### Autonomous AI-Powered E-Commerce Platform
+### Autonomous E‑Commerce Platform with AI‑Powered Shopping Assistant  
 
-[![Java 21](https://img.shields.io/badge/Java-21-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://openjdk.org/)
-[![Spring Boot 3.3.4](https://img.shields.io/badge/Spring%20Boot-3.3.4-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
-[![NVIDIA Nemotron](https://img.shields.io/badge/NVIDIA-Nemotron--3--Ultra-76B900?style=for-the-badge&logo=nvidia&logoColor=white)](https://build.nvidia.com/)
-[![Render Deploy](https://img.shields.io/badge/Render-Docker%20Ready-46E3B7?style=for-the-badge&logo=render&logoColor=black)](https://render.com/)
-[![Brevo](https://img.shields.io/badge/Brevo-Transactional%20OTP-0B99FF?style=for-the-badge&logo=brevo&logoColor=white)](https://www.brevo.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![Java 21](https://img.shields.io/badge/Java-21-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://openjdk.org/)  
+[![Spring Boot 3.3.4](https://img.shields.io/badge/Spring%20Boot-3.3.4-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)  
+[![NVIDIA Nemotron](https://img.shields.io/badge/NVIDIA-Nemotron%203--Ultra-76B900?style=for-the-badge&logo=nvidia&logoColor=white)](https://build.nvidia.com/)  
+[![Render Deploy](https://img.shields.io/badge/Render-Docker%20Ready-46E3B7?style=for-the-badge&logo=render&logoColor=black)](https://render.com/)  
+[![Brevo](https://img.shields.io/badge/Brevo-Transactional%20OTP-0B99FF?style=for-the-badge&logo=brevo&logoColor=white)](https://www.brevo.com/)  
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)  
 
-**Architected by [Shubh Kumar](https://github.com/shubhyagami)**
+**Architected by [Shubh Kumar](https://github.com/shubhyagami)**  
 
 </div>
 
 ---
 
-## Table of Contents
+## Overview  
 
-- [Overview](#overview)
-- [Key Features](#key-features)
-- [AI Architecture & Guardrails](#ai-architecture--guardrails)
-- [Dynamic UI & Particle Engine](#dynamic-ui--particle-engine)
-- [Network Geolocation & Mini-Map](#network-geolocation--mini-map)
-- [Transactional Emails & OTP](#transactional-emails--otp)
-- [AI Comparison Matrix](#ai-comparison-matrix)
-- [Getting Started](#getting-started)
-- [Deployment](#deployment)
-- [Demo Accounts](#demo-accounts)
-- [Environment Variables](#environment-variables)
-- [Changelog](#changelog)
+OmniMart AI is a Spring Boot 3 application that delivers a conversational shopping assistant, hyper‑personalized recommendations, and an immersive UI built with a procedural canvas, particle effects, and a live mini‑map. All AI interactions are grounded in the database to guarantee zero hallucinations, and the system orchestrates multiple AI providers with automatic fallback.
 
 ---
 
-## Overview
+## Key Features  
 
-OmniMart AI is an advanced e-commerce platform that showcases an autonomous AI shopping assistant, hyper-personalized product recommendations, and an intuitive user interface. Built with Spring Boot 3 and a hybrid recommendation engine, it ensures accurate and reliable AI responses by enforcing database-grounded AI guardrails.
-
-## Key Features
-
-OmniMart AI features several innovative aspects, including:
-
-*   **AI-Powered Shopping Assistant**: Provides a conversational interface for users to explore and discover products using NVIDIA Nemotron-3-Ultra.
-*   **Hybrid Recommendation Engine**: Combines user preferences, behavioral patterns, content relevance, ratings, and popularity to deliver accurate and highly relevant product recommendations.
-*   **Customer Feedback Sentiment & Emotion Intelligence**: Analyzes customer reviews to extract deep sentiment and classify topics, providing valuable insights for business optimization.
-*   **Procedural HTML5 Canvas Live Wallpaper**: Offers a vector rendering engine, parallax effect, and glow, creating an engaging and immersive experience.
-*   **Interactive Cursor with Particle Effects**: Adds an engaging visual touch to the user interface with a fluid animated shopping cursor and particle bursts on clicks.
-
-## AI Architecture & Guardrails
-
-Our AI architecture ensures accuracy and reliability through:
-
-*   **Zero Hallucination Guarantee**: Database-grounded AI responses eliminate potential hallucinations, ensuring accurate product retrieval.
-*   **No Raw SQL Execution**: Natural language queries are transformed into structured criteria without executing untrusted strings.
-*   **Sequential Multi-Key Fallback**: Automatic failover between NVIDIA API keys ensures seamless operation in case of network timeouts.
-
-```mermaid
-graph TD
-    UserClient[Web Browser / User UI] -->|HTTP / AJAX| Security[Spring Security 6 & Filters]
-    Security --> Controllers[MVC & REST Controllers]
-    Controllers --> AIOrch[AI Orchestrator & Multi-Turn Memory]
-    
-    AIOrch --> ToolRouter[Safe Backend Tool Execution]
-    ToolRouter --> ProductService[Product & Inventory Service]
-    ToolRouter --> PreferenceService[User Preference Profiler]
-    ToolRouter --> ComparisonService[Product Comparison Engine]
-    ToolRouter --> FeedbackService[Customer Feedback Intelligence]
-    
-    AIOrch --> ProviderSwitch[AI Provider Layer]
-    ProviderSwitch --> Nvidia[NVIDIA AI Provider]
-    ProviderSwitch --> LocalAI[Local AI Provider]
-    ProviderSwitch --> MockAI[Mock AI Provider]
-    
-    ProductService --> DB[(H2 Database / MySQL)]
-    PreferenceService --> DB
-    FeedbackService --> DB
-```
-
-## Dynamic UI & Particle Engine
-
-Our interactive interface features:
-
-| Component | Visual Feature | Implementation |
-|---|---|---|
-| **Cosmos Wallpaper** | Procedural 2D neon doodles, 3-layer parallax, glowing cursor aura | `live-wallpaper.js` & `live-wallpaper.css` |
-| **Interactive Cursor** | Magnetic trailing ring, shopping bag morph, click particle burst | `cursor.js` & `main.css` |
-| **Live Mini-Map** | Leaflet radar marker, dark tiles, pulse rings, IP scanner | `network-location.js` |
-| **Comparison Matrix** | High-contrast glassmorphic table, WCAG 16.5:1 ratio, spec breakdown | `compare/compare.html` |
-| **Glassmorphic Cards** | 16px backdrop-blur, gradient border glows, hover lift | Bootstrap 5.3 + Custom CSS Tokens |
-
-## Network Geolocation & Mini-Map
-
-Our platform leverages network geolocation to:
-
-*   **Automatically Determine Network Location**: City, State, Country, and Postal Code using public IP intelligence without requiring browser GPS permissions.
-*   **Show Live Destination**: Visualize the user's network location on a leaflet mini-map.
-
-## Transactional Emails & OTP
-
-We securely send transactional emails using:
-
-*   **Brevo API Integration**: Connecting via `https://api.brevo.com/v3/smtp/email`.
-*   **Security-Enhanced Email Use-Cases**: Verify account creation, profile updates, and issue rich HTML order receipts with tracking links.
-
-## AI Comparison Matrix
-
-*   **Multi-Product Comparator**: Compare up to 4 products simultaneously.
-*   **Hardware Matrix**: Compare Processor, RAM, Storage, Display, Battery, Camera, OS, and Price.
-*   **Automated AI Verdict Banner**: Highlight the top-performing products based on their composite scores.
+- **AI Shopping Assistant** – Conversational product discovery powered by NVIDIA Nemotron‑3‑Ultra.  
+- **Hybrid Recommendation Engine** – Weighs preferences, behavior, content relevance, ratings, and popularity for precise suggestions.  
+- **Sentiment & Emotion Intelligence** – Analyzes reviews to extract topics and sentiment, enabling business‑focused insights.  
+- **Procedural Live Wallpaper & Particle Engine** – 3‑layer parallax neon doodles, magnetic cursor ring, shopping‑bag morph, and click‑burst particles.  
+- **Network Geolocation & Mini‑Map** – Determines city, state, country, and postal code from IP and visualizes it on a Leaflet mini‑map.  
+- **Transactional Email & OTP** – Secure email delivery via Brevo for account creation, updates, and order receipts.  
+- **AI Comparison Matrix** – Compare up to four products side‑by‑side with hardware breakdown and an AI‑generated verdict banner.  
+- **Zero‑Hallucination Guardrails** – Responses are derived exclusively from the database; no raw SQL is executed.  
 
 ---
 
-## Getting Started
+## AI Architecture & Guardrails  
 
-Before running the application, ensure you have:
+The system is organized into clear layers:
 
-*   **Java 21** or later installed on your system.
-*   **Maven 3.9+** or use the included `mvnw` wrapper.
-*   **Docker** for containerized deployment.
+1. **Web Layer** – Browser UI communicates with Spring Security‑protected REST endpoints.  
+2. **Controller Layer** – Handles HTTP requests and routes to the AI orchestrator.  
+3. **AI Orchestrator** – Manages multi‑turn memory, routes queries to the appropriate backend tool, and switches AI providers when needed.  
+4. **Tool Services** – Safely executes operations such as product lookup, preference profiling, comparison, and feedback analysis without exposing raw SQL.  
+5. **Data Layer** – Persists all data in an H2/MySQL database.  
 
-### 1. Run Locally with Maven Wrapper
+All AI responses are database‑grounded; the orchestrator guarantees that no untrusted strings reach the database engine.
+
+---
+
+## Dynamic UI & Particle Engine  
+
+- **Cosmos Wallpaper** – Procedurally generated 2‑D neon doodles with 3‑layer parallax and glow.  
+- **Interactive Cursor** – Magnetic trailing ring, morphing shopping‑bag icon, and particle burst on click.  
+- **Live Mini‑Map** – Leaflet radar marker, dark tiles, pulse rings, and IP‑based location scanner.  
+- **Comparison Matrix** – Glassmorphic table with WCAG‑compliant contrast, automatic AI verdict banner.  
+- **Glassmorphic Cards** – 16 px backdrop‑blur, gradient border glows, smooth hover lift.  
+
+All UI components reuse shared CSS tokens and Bootstrap 5.3 utilities for consistency.
+
+---
+
+## Getting Started  
+
+### Prerequisites  
+
+- **Java 21** (or newer)  
+- **Maven 3.9+** – the project ships with the `mvnw` wrapper, so no separate installation is required.  
+- **Docker** (optional, for containerized runs).  
+
+### Run Locally  
 
 ```bash
 # Windows
@@ -133,87 +80,70 @@ Before running the application, ensure you have:
 ./mvnw spring-boot:run
 ```
 
-Access the application at:
+The application starts on **port 8080** (or the `$PORT` variable when deployed on Render).  
 
-*   **Storefront**: <http://localhost:8080/>
-*   **H2 DB Console**: <http://localhost:8080/h2-console/>
+- Storefront: <http://localhost:8080/>  
+- H2 Console: <http://localhost:8080/h2-console>  
 
-### 2. Build and Run with Docker
+### Build & Run with Docker  
 
 ```bash
-# Build multi-stage Docker image
 docker build -t omnimart-ai:latest .
-
-# Run container
 docker run -p 8080:8080 -e AI_PROVIDER=nvidia omnimart-ai:latest
 ```
 
 ---
 
-## Deployment
+## Deployment  
 
-Deploy OmniMart AI to **Render** using Docker or Render Blueprints.
+### Render Blueprint  
 
-### Option 1: Render Blueprint (`render.yaml`) 
+1. Fork or push the repository to GitHub.  
+2. Open the Render Dashboard and click **New + → Blueprint**.  
+3. Select the repository and click **Apply**.  
 
-1.  Fork or push this repository to GitHub.
-2.  Log in to the [Render Dashboard](https://dashboard.render.com/).
-3.  Click **New +** → **Blueprint**.
-4.  Select your repository.
-5.  Click **Apply**.
+Render automatically detects the Dockerfile and configures the service with the required environment variables.
 
-### Option 2: Deploy as a Docker Web Service 
+### Alternative Docker Deploy  
 
-1.  In Render Dashboard, click **New +** → **Web Service**.
-2.  Connect your GitHub repository.
-3.  Choose **Docker** as the runtime.
-4.  Set Environment Variables.
-5.  Click **Create Web Service**.
-
-> **Note**: The application is configured to automatically read Render's dynamic `$PORT` environment variable (`server.port: ${PORT:8080}`).
+Push the repository to a container registry, then create a Docker Web Service on Render, configure the environment variables, and expose the `$PORT` variable (`server.port: ${PORT:8080}`).
 
 ---
 
-## Demo Accounts
+## Demo Accounts  
 
-Click **"🔑 Demo Account Credentials"** on the `/login` page to auto-fill credentials:
+- **Customer** – `user@omnimart.com` / `password123` – full storefront access, AI assistant, cart, orders, wishlist.  
+- **Admin** – `admin@omnimart.com` / `admin123` – executive analytics, sentiment charts, admin AI Q&A.  
 
-| Role | Email | Password | Permissions |
-|---|---|---|---|
-| **Demo Customer** | `user@omnimart.com` | `password123` | Storefront, AI Assistant, Profile, Cart, Orders, Wishlist |
-| **System Admin** | `admin@omnimart.com` | `admin123` | Executive Analytics Dashboard, Sentiment Charts, Admin AI Q&A |
+Credentials can be auto‑filled on the `/login` page.
 
 ---
 
-## Environment Variables
+## Environment Variables  
 
-| Variable | Default Value | Description |
-|---|---|---|
-| `PORT` | `8080` | Server HTTP port (auto-bound by Render) |
-| `AI_PROVIDER` | `nvidia` | Active AI provider (`nvidia`, `local`, or `mock`) |
-| `NVIDIA_API_KEYS` | *3-Key Fallback Pool* | Comma-separated NVIDIA API Keys |
-| `NVIDIA_MODEL` | `nvidia/nemotron-3-ultra-550b-a55b` | Model identifier |
-| `BREVO_API_KEY` | *Configured Key* | Brevo Transactional Email API Key |
-| `BREVO_SENDER_EMAIL` | `support@omnimart-ai.com` | Verified sender address |
-| `BREVO_SENDER_NAME` | `OmniMart AI` | Email sender name |
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `PORT` | `8080` | HTTP port (auto‑bound on Render). |
+| `AI_PROVIDER` | `nvidia` | Active AI provider (`nvidia`, `local`, or `mock`). |
+| `NVIDIA_API_KEYS` | *comma‑separated list* | Fallback pool of NVIDIA API keys. |
+| `NVIDIA_MODEL` | `nvidia/nemotron-3-ultra-550b-a55b` | Model identifier. |
+| `BREVO_API_KEY` | *configured key* | Brevo Transactional Email API key. |
+| `BREVO_SENDER_EMAIL` | `support@omnimart-ai.com` | Verified sender address. |
+| `BREVO_SENDER_NAME` | `OmniMart AI` | Email sender name. |
 
 ---
 
-## Changelog
+## Changelog  
 
-### v1.0.0 - 2026-08-20
-- **Initial Release**
-- Implemented core Spring Boot 3 backend with Java 21.
-- Integrated NVIDIA Nemotron-3-Ultra autonomous shopping assistant with multi-turn memory.
-- Added hybrid recommendation engine with five-factor weighted scoring.
-- Built procedural HTML5 canvas live wallpaper and fluid animated cursor mechanics.
-- Reached 100% database-grounded AI guardrails (Zero Hallucination Guarantee).
+- **v1.0.0 – 2026‑08‑20**  
+  - Initial release with Spring Boot 3, Java 21, and NVIDIA Nemotron‑3‑Ultra integration.  
+  - Implemented hybrid recommendation engine, zero‑hallucination guardrails, and the procedural UI toolkit.  
+  - Added Docker multi‑stage build, Render deployment blueprint, and demo account workflow.  
 
 ---
 
 <div align="center">
 
-**Designed & Crafted by [Shubh Kumar](https://github.com/shubhyagami)**
+**Designed & Crafted by [Shubh Kumar](https://github.com/shubhyagami)**  
 
 </div>
--------------
