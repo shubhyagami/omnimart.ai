@@ -19,34 +19,34 @@
 
 ## Overview  
 
-OmniMart AI is a Spring Boot 3 application that delivers a conversational shopping assistant, hyper‑personalized recommendations, and an immersive UI built with a procedural canvas, particle effects, and a live mini‑map. All AI interactions are grounded in the database to guarantee zero hallucinations, and the system orchestrates multiple AI providers with automatic fallback.
+OmniMart AI is a Spring Boot 3 application that provides a conversational shopping assistant, hyper‑personalized product recommendations, and an interactive UI built with a procedural canvas, particle effects, and a live mini‑map. All AI interactions are sourced exclusively from the database, ensuring zero hallucinations, while the system can switch between multiple AI providers with automatic fallback.
 
 ---
 
 ## Key Features  
 
 - **AI Shopping Assistant** – Conversational product discovery powered by NVIDIA Nemotron‑3‑Ultra.  
-- **Hybrid Recommendation Engine** – Weighs preferences, behavior, content relevance, ratings, and popularity for precise suggestions.  
-- **Sentiment & Emotion Intelligence** – Analyzes reviews to extract topics and sentiment, enabling business‑focused insights.  
+- **Hybrid Recommendation Engine** – Combines user preferences, behavior, content relevance, ratings, and popularity for precise suggestions.  
+- **Sentiment & Emotion Intelligence** – Analyzes reviews to extract topics and sentiment, delivering business‑focused insights.  
 - **Procedural Live Wallpaper & Particle Engine** – 3‑layer parallax neon doodles, magnetic cursor ring, shopping‑bag morph, and click‑burst particles.  
 - **Network Geolocation & Mini‑Map** – Determines city, state, country, and postal code from IP and visualizes it on a Leaflet mini‑map.  
 - **Transactional Email & OTP** – Secure email delivery via Brevo for account creation, updates, and order receipts.  
-- **AI Comparison Matrix** – Compare up to four products side‑by‑side with hardware breakdown and an AI‑generated verdict banner.  
+- **AI Comparison Matrix** – Side‑by‑side product comparison with hardware breakdown and an AI‑generated verdict banner.  
 - **Zero‑Hallucination Guardrails** – Responses are derived exclusively from the database; no raw SQL is executed.  
 
 ---
 
 ## AI Architecture & Guardrails  
 
-The system is organized into clear layers:
+The application is structured into clear layers:
 
 1. **Web Layer** – Browser UI communicates with Spring Security‑protected REST endpoints.  
 2. **Controller Layer** – Handles HTTP requests and routes to the AI orchestrator.  
-3. **AI Orchestrator** – Manages multi‑turn memory, routes queries to the appropriate backend tool, and switches AI providers when needed.  
-4. **Tool Services** – Safely executes operations such as product lookup, preference profiling, comparison, and feedback analysis without exposing raw SQL.  
+3. **AI Orchestrator** – Manages multi‑turn memory, routes queries to the appropriate tool, and switches AI providers when needed.  
+4. **Tool Services** – Safely performs operations such as product lookup, preference profiling, comparison, and feedback analysis without exposing raw SQL.  
 5. **Data Layer** – Persists all data in an H2/MySQL database.  
 
-All AI responses are database‑grounded; the orchestrator guarantees that no untrusted strings reach the database engine.
+All AI responses are grounded in the database, guaranteeing that no untrusted strings reach the database engine.
 
 ---
 
@@ -67,7 +67,7 @@ All UI components reuse shared CSS tokens and Bootstrap 5.3 utilities for cons
 ### Prerequisites  
 
 - **Java 21** (or newer)  
-- **Maven 3.9+** – the project ships with the `mvnw` wrapper, so no separate installation is required.  
+- **Maven 3.9+** – the project includes the `mvnw` wrapper, so no separate installation is required.  
 - **Docker** (optional, for containerized runs).  
 
 ### Run Locally  
