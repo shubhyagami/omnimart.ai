@@ -19,36 +19,30 @@
 
 ## Overview  
 
-OmniMart AI is a Spring Boot 3 application that provides a conversational shopping assistant, hyper‑personalized product recommendations, and an interactive UI built with a procedural canvas, particle effects, and a live mini‑map. All AI interactions are sourced exclusively from the database, ensuring zero hallucinations, while the system can switch between multiple AI providers with automatic fallback.
-
----
+OmniMart AI is a Spring Boot 3 application that delivers a conversational shopping assistant, hyper‑personalized product recommendations, and an interactive UI featuring a procedural canvas, particle effects, and a live mini‑map. All AI interactions are sourced exclusively from the database, guaranteeing zero hallucinations, and the system can switch between multiple AI providers with automatic fallback.
 
 ## Key Features  
 
 - **AI Shopping Assistant** – Conversational product discovery powered by NVIDIA Nemotron‑3‑Ultra.  
 - **Hybrid Recommendation Engine** – Combines user preferences, behavior, content relevance, ratings, and popularity for precise suggestions.  
-- **Sentiment & Emotion Intelligence** – Analyzes reviews to extract topics and sentiment, delivering business‑focused insights.  
+- **Sentiment & Emotion Intelligence** – Extracts topics and sentiment from reviews to provide business insights.  
 - **Procedural Live Wallpaper & Particle Engine** – 3‑layer parallax neon doodles, magnetic cursor ring, shopping‑bag morph, and click‑burst particles.  
 - **Network Geolocation & Mini‑Map** – Determines city, state, country, and postal code from IP and visualizes it on a Leaflet mini‑map.  
 - **Transactional Email & OTP** – Secure email delivery via Brevo for account creation, updates, and order receipts.  
 - **AI Comparison Matrix** – Side‑by‑side product comparison with hardware breakdown and an AI‑generated verdict banner.  
 - **Zero‑Hallucination Guardrails** – Responses are derived exclusively from the database; no raw SQL is executed.  
 
----
+## Architecture & Guardrails  
 
-## AI Architecture & Guardrails  
-
-The application is structured into clear layers:
+The application follows a layered architecture:
 
 1. **Web Layer** – Browser UI communicates with Spring Security‑protected REST endpoints.  
-2. **Controller Layer** – Handles HTTP requests and routes to the AI orchestrator.  
-3. **AI Orchestrator** – Manages multi‑turn memory, routes queries to the appropriate tool, and switches AI providers when needed.  
+2. **Controller Layer** – Routes HTTP requests to the AI orchestrator.  
+3. **AI Orchestrator** – Manages multi‑turn memory, selects the appropriate tool, and falls back to alternative AI providers when needed.  
 4. **Tool Services** – Safely performs operations such as product lookup, preference profiling, comparison, and feedback analysis without exposing raw SQL.  
 5. **Data Layer** – Persists all data in an H2/MySQL database.  
 
-All AI responses are grounded in the database, guaranteeing that no untrusted strings reach the database engine.
-
----
+All AI responses are grounded in the database, ensuring that no untrusted strings reach the database engine.
 
 ## Dynamic UI & Particle Engine  
 
@@ -58,9 +52,7 @@ All AI responses are grounded in the database, guaranteeing that no untrusted st
 - **Comparison Matrix** – Glassmorphic table with WCAG‑compliant contrast, automatic AI verdict banner.  
 - **Glassmorphic Cards** – 16 px backdrop‑blur, gradient border glows, smooth hover lift.  
 
-All UI components reuse shared CSS tokens and Bootstrap 5.3 utilities for consistency.
-
----
+The UI reuses shared CSS tokens and Bootstrap 5.3 utilities for consistency.
 
 ## Getting Started  
 
@@ -72,13 +64,11 @@ All UI components reuse shared CSS tokens and Bootstrap 5.3 utilities for cons
 
 ### Run Locally  
 
-```bash
-# Windows
-.\mvnw.cmd spring-boot:run
+# Windows  
+.mvnw.cmd spring-boot:run  
 
-# macOS / Linux
-./mvnw spring-boot:run
-```
+# macOS / Linux  
+./mvnw spring-boot:run  
 
 The application starts on **port 8080** (or the `$PORT` variable when deployed on Render).  
 
@@ -87,37 +77,27 @@ The application starts on **port 8080** (or the `$PORT` variable when deployed
 
 ### Build & Run with Docker  
 
-```bash
-docker build -t omnimart-ai:latest .
-docker run -p 8080:8080 -e AI_PROVIDER=nvidia omnimart-ai:latest
-```
-
----
+docker build -t omnimart-ai:latest .  
+docker run -p 8080:8080 -e AI_PROVIDER=nvidia omnimart-ai:latest  
 
 ## Deployment  
 
 ### Render Blueprint  
 
-1. Fork or push the repository to GitHub.  
-2. Open the Render Dashboard and click **New + → Blueprint**.  
-3. Select the repository and click **Apply**.  
+1. Push the repository to GitHub.  
+2. Open the Render Dashboard, click **New + → Blueprint**, and select the repository.  
+3. Render automatically detects the Dockerfile and configures the service with the required environment variables.  
 
-Render automatically detects the Dockerfile and configures the service with the required environment variables.
+### Alternative Docker Deployment  
 
-### Alternative Docker Deploy  
-
-Push the repository to a container registry, then create a Docker Web Service on Render, configure the environment variables, and expose the `$PORT` variable (`server.port: ${PORT:8080}`).
-
----
+Push the image to a container registry, then create a Docker Web Service on Render, set the environment variables, and expose the `$PORT` variable (`server.port: ${PORT:8080}`).
 
 ## Demo Accounts  
 
 - **Customer** – `user@omnimart.com` / `password123` – full storefront access, AI assistant, cart, orders, wishlist.  
 - **Admin** – `admin@omnimart.com` / `admin123` – executive analytics, sentiment charts, admin AI Q&A.  
 
-Credentials can be auto‑filled on the `/login` page.
-
----
+Credentials are auto‑filled on the `/login` page.
 
 ## Environment Variables  
 
@@ -131,16 +111,12 @@ Credentials can be auto‑filled on the `/login` page.
 | `BREVO_SENDER_EMAIL` | `support@omnimart-ai.com` | Verified sender address. |
 | `BREVO_SENDER_NAME` | `OmniMart AI` | Email sender name. |
 
----
-
 ## Changelog  
 
 - **v1.0.0 – 2026‑08‑20**  
   - Initial release with Spring Boot 3, Java 21, and NVIDIA Nemotron‑3‑Ultra integration.  
   - Implemented hybrid recommendation engine, zero‑hallucination guardrails, and the procedural UI toolkit.  
   - Added Docker multi‑stage build, Render deployment blueprint, and demo account workflow.  
-
----
 
 <div align="center">
 
