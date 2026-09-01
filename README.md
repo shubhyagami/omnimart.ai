@@ -13,14 +13,14 @@
 
 ## Overview  
 
-OmniMart AI is a Spring Boot 3 application that provides a conversational shopping assistant, hyper‑personalized product recommendations, and an interactive UI featuring a procedural canvas, particle effects, and a live mini‑map. All AI interactions are grounded in the database, eliminating hallucinations, and the system can switch between multiple AI providers with automatic fallback.
+OmniMart AI is a Spring Boot 3 application that delivers a conversational shopping assistant, hyper‑personalized product recommendations, and an interactive UI featuring procedural canvas effects, particle animations, and a live mini‑map. All AI interactions are grounded in the database, eliminating hallucinations, and the system can switch between multiple AI providers with automatic fallback.
 
 ## Key Features  
 
 - **AI Shopping Assistant** – Conversational product discovery powered by NVIDIA Nemotron‑3‑Ultra.  
-- **Hybrid Recommendation Engine** – Combines user preferences, behavior, content relevance, ratings, and popularity for precise suggestions.  
-- **Sentiment & Emotion Intelligence** – Extracts topics and sentiment from reviews to generate business insights.  
-- **Procedural Live Wallpaper & Particle Engine** – 3‑layer parallax neon doodles, magnetic cursor ring, shopping‑bag morph, and click‑burst particles.  
+- **Hybrid Recommendation Engine** – Merges user preferences, behavior, content relevance, ratings, and popularity for precise suggestions.  
+- **Sentiment & Emotion Analysis** – Extracts topics and sentiment from reviews to provide business insights.  
+- **Procedural Canvas & Particle Engine** – 3‑layer parallax neon doodles, magnetic cursor ring, shopping‑bag morph, and click‑burst particles.  
 - **Network Geolocation & Mini‑Map** – Determines city, state, country, and postal code from IP and visualizes it on a Leaflet mini‑map.  
 - **Transactional Email & OTP** – Secure email delivery via Brevo for account creation, order receipts, and password resets.  
 - **AI Comparison Matrix** – Side‑by‑side product comparison with hardware breakdown and an AI‑generated verdict banner.  
@@ -43,8 +43,8 @@ All AI responses are grounded in the database, ensuring that no untrusted string
 - **Cosmos Wallpaper** – Procedurally generated 2‑D neon doodles with 3‑layer parallax and glow.  
 - **Interactive Cursor** – Magnetic trailing ring, morphing shopping‑bag icon, and particle burst on click.  
 - **Live Mini‑Map** – Leaflet radar marker, dark tiles, pulse rings, and IP‑based location scanner.  
-- **Comparison Matrix** – Glassmorphic table with WCAG‑compliant contrast, automatic AI verdict banner.  
-- **Glassmorphic Cards** – 16 px backdrop‑blur, gradient border glows, smooth hover lift.  
+- **Comparison Matrix** – Glassmorphic table with WCAG‑compliant contrast and an automatic AI verdict banner.  
+- **Glassmorphic Cards** – 16 px backdrop‑blur, gradient border glows, and smooth hover lift.  
 
 The UI reuses shared CSS tokens and Bootstrap 5.3 utilities for consistency.
 
