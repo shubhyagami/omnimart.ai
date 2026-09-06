@@ -14,119 +14,102 @@
 ## Overview
 
 OmniMart AI is a Spring Boot 3 application that powers a conversational shopping assistant and an AI‑driven recommendation engine.  
-AI responses are persisted in a relational database so the service can audit or replay interactions, avoiding hallucinations that can arise from raw‑SQL queries.  
-The application can use NVIDIA’s Nemotron 3 Ultra, a local model, or a mock provider and will automatically fall back if a provider is unavailable.
+All AI responses are persisted in a relational database, enabling auditing, replay, and reduced hallucination.  
+The service can use NVIDIA’s Nemotron 3 Ultra, a local model, or a mock provider, and will automatically fall back if a provider is unavailable.
 
 ---
 
-## Features
+## Core Features
 
-- **Conversational Assistant** – Multi‑turn chat powered by NVIDIA Nemotron 3 Ultra, with memory and tool‑based reasoning.  
-- **Recommendation Engine** – Combines user preferences, browsing history, content relevance, ratings and popularity to surface relevant products.  
-- **Sentiment & Topic Mining** – Extracts actionable insights from user reviews.  
-- **AI‑Generated Comparisons** – Produces side‑by‑side specs tables with an AI verdict banner.  
-- **Procedural UI** – Neon doodles, magnetic cursor, click‑burst particles, glass‑morphic cards.  
-- **Geolocation** – Shows IP‑based city/state/country on a responsive Leaflet map.  
-- **Transactional Email** – Brevo integration for OTPs, receipts and account actions.  
-- **Zero‑Hallucination Guardrails** – All data is fetched through secure service calls; no raw SQL is exposed.
+| Feature | Description |
+|---------|-------------|
+| Conversational Assistant | Multi‑turn chat with memory and tool‑based reasoning powered by NVIDIA Nemotron 3 Ultra. |
+| Recommendation Engine | Integrates user preferences, browsing history, content relevance, ratings, and popularity to surface relevant products. |
+| Sentiment & Topic Mining | Extracts actionable insights from user reviews. |
+| AI‑Generated Comparisons | Generates side‑by‑side spec tables with an AI verdict banner. |
+| Procedural UI | Neon doodles, magnetic cursor, click‑burst particles, glass‑morphic cards. |
+| Geolocation | Displays IP‑based city/state/country on a responsive Leaflet map. |
+| Transactional Email | Brevo integration for OTPs, receipts, and account actions. |
+| Zero‑Hallucination Guardrails | All data is fetched through secure service calls; no raw SQL is exposed. |
 
 ---
 
 ## Architecture
 
-```text
-┌─────────────────────┐   HTTP(S)   ┌───────────────────────┐
-│  Web Layer (UI)     │───────────►│  Controller Layer      │
-│  (React/Thymeleaf) │            │  (Spring MVC)          │
-└─────────────────────┘            └───────┬────────────────┘
-                                     │
-                               ┌───────▼────────────────┐
-                               │  AI Orchestrator        │
-                               │  (Memory, tool selector)│
-                               └───────┬────────────────┘
-                                     │
-                                    ▼
-                               ┌────────────────────────────┐
-                               │  Tool Services              │
-                               │  (lookup, profiling, comparison)│
-                               └───────┬─────────────────────┘
-                                     │
-                                     ▼
-                               ┌─────────────────────┐
-                               │  Data Layer          │
-                               │  (H2 / MySQL)        │
-                               └─────────────────────┘
+```
+┌───────────────────────┐   HTTP(S)   ┌──────────────────────────┐
+│  Web Layer (React/Thymeleaf) │────────────► │  Controller Layer (Spring MVC) │
+└───────────────────────┘            └───────┬──────────────────────┘
+                                            │
+                                   ┌───────▼─────────────────────┐
+                                   │  AI Orchestrator            │
+                                   │  (Memory, tool selector)    │
+                                   └───────┬──────────────────────┘
+                                            │
+                                           ▼
+                                   ┌─────────────────────────┐
+                                   │  Tool Services          │
+                                   │  (lookup, profiling,  │
+                                   │   comparison)          │
+                                   └───────┬─────────────────┘
+                                            │
+                                           ▼
+                                   ┌──────────────────────┐
+                                   │  Data Layer           │
+                                   │  (H2 / MySQL)         │
+                                   └──────────────────────┘
 ```
 
 ---
 
-## UI Highlights
-
-| Feature | Description |
-|---------|-------------|
-| Cosmos Wallpaper | Three‑layer neon doodle parallax with glow |
-| Interactive Cursor | Magnetic ring, bag‑icon morphing, click‑burst particles |
-| Live Mini‑Map | Leaflet dark tiles, pulse rings, IP‑based location |
-| Glass‑morphic Cards & Table | 16 px backdrop‑blur, gradient borders, WCAG‑compliant contrast |
-
----
-
-## Getting Started
-
-### Prerequisites
-
-| Tool   | Minimum Version |
-|--------|------------------|
-| Java   | 21+ |
-| Maven  | 3.9+ (wrapper `mvnw` is included) |
-| Docker | Optional, recommended for CI/CD |
-
-### Quick start
+## Quick Start
 
 ```bash
-# On Windows
+# Install dependencies and run from source
+# Windows
 ./mvnw.cmd spring-boot:run
 
-# On macOS / Linux
+# macOS / Linux
 ./mvnw spring-boot:run
 ```
 
-The application listens on `8080` by default.  
-- Storefront: <http://localhost:8080>  
-- H2 Console: <http://localhost:8080/h2-console>
+> The application runs on port **8080** by default.  
+> - Storefront: <http://localhost:8080>  
+> - H2 Console: <http://localhost:8080/h2-console>
 
 ### Docker
 
 ```bash
-# Build
+# Build a Docker image
 docker build -t omnimart-ai:latest .
 
-# Run
+# Run the container
 docker run -p 8080:8080 -e AI_PROVIDER=nvidia omnimart-ai:latest
 ```
 
 ---
 
-## Deploy to Render
+## Deploying to Render
 
-1. Push the repo to GitHub.  
-2. In Render, create a new service → **From GitHub** and select this repository.  
-3. Render will detect the Dockerfile, build the image, and ask for the environment variables below.  
-4. The service is automatically exposed on `${PORT}`; the app uses `server.port: ${PORT:8080}`.
+1. Push the repository to GitHub.  
+2. In Render, create a new Web Service → *From GitHub* → select this repo.  
+3. Render will pick up the `Dockerfile`.  
+4. Set the following environment variables (see below).  
+5. Render exposes the service on `${PORT}`; the app automatically listens on that port.
 
 ---
 
 ## Environment Variables
 
-| Variable           | Default                     | Description |
-|--------------------|-----------------------------|-------------|
-| `PORT`             | `8080`                      | HTTP port (overridden by Render). |
-| `AI_PROVIDER`      | `nvidia`                    | `nvidia`, `local`, or `mock`. |
-| `NVIDIA_API_KEYS`  | **required**                | Comma‑separated NVIDIA API keys. |
-| `NVIDIA_MODEL`     | `nvidia/nemotron-3-ultra-550b-a55b` | Identifier for the NVIDIA model. |
-| `BREVO_API_KEY`    | **required**                | Brevo transactional email key. |
-| `BREVO_SENDER_EMAIL` | `support@omnimart-ai.com` | Verified sender address. |
-| `BREVO_SENDER_NAME` | `OmniMart AI`               | Sender name used in outgoing emails. |
+| Variable           | Default                                      | Description |
+|--------------------|----------------------------------------------|------------|
+| `PORT`             | `8080`                                       | HTTP port (overridden by Render). |
+| `AI_PROVIDER`      | `nvidia`                                     | `nvidia`, `local`, or `mock`. |
+| `NVIDIA_API_KEYS`  | **required**                                  | Comma‑separated NVIDIA API keys. |
+| `NVIDIA_MODEL`     | `nvidia/nemotron-3-ultra-550b-a55b`          | Identifier for the NVIDIA model. |
+| `BREVO_API_KEY`    | **required**                                  | Brevo transactional email key. |
+| `BREVO_SENDER_EMAIL` | `support@omnimart-ai.com`                 | Verified sender address. |
+| `BREVO_SENDER_NAME`   | `OmniMart AI`                                 | Sender name used in outgoing emails. |
 
 ---
 
@@ -134,16 +117,17 @@ docker run -p 8080:8080 -e AI_PROVIDER=nvidia omnimart-ai:latest
 
 > The login form pre‑populates demo credentials.
 
-| Role     | Email                | Password      | Access |
-|----------|---------------------|---------------|--------|
-| Customer | `user@omnimart.com` | `password123` | Storefront, cart, AI assistant |
-| Admin    | `admin@omnimart.com`| `admin123`  | Analytics, sentiment charts, admin AI Q&A |
+| Role     | Email                | Password       | Access |
+|----------|----------------------|----------------|--------|
+| Customer | `user@omnimart.com`  | `password123`  | Storefront, cart, AI assistant |
+| Admin    | `admin@omnimart.com` | `admin123`     | Analytics, sentiment charts, admin AI Q&A |
 
 ---
 
 ## Changelog
 
-- **v1.0.0 – 2026‑08‑20** – Initial release: Spring Boot 3, NVIDIA Nemotron 3 Ultra, hybrid recommendation engine, zero‑hallucination guardrails, procedural UI toolkit, Docker multi‑stage build, Render blueprint, demo accounts.
+- **v1.0.0 – 2026‑08‑20**  
+  * Initial release: Spring Boot 3, NVIDIA Nemotron 3 Ultra, hybrid recommendation engine, zero‑hallucination guardrails, procedural UI toolkit, Docker multi‑stage build, Render blueprint, demo accounts.
 
 ---
 
