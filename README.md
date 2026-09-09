@@ -1,4 +1,4 @@
-# OmniMart AI
+# OmniMart AI
 
 [![Java 21](https://img.shields.io/badge/Java-21-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://openjdk.org/)  
 [![Spring Boot 3.3.x](https://img.shields.io/badge/Spring%20Boot-3.3.x-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)  
@@ -13,9 +13,9 @@
 
 ## Overview
 
-OmniMart AI is a Spring Boot 3 application that powers a conversational shopping assistant and an AI‑driven recommendation engine.  
-All AI responses are persisted in a relational database, enabling auditing, replay, and reduced hallucination.  
-The service can use NVIDIA’s Nemotron 3 Ultra, a local model, or a mock provider, and will automatically fall back if a provider is unavailable.
+OmniMart AI is a Spring Boot 3 application that powers a conversational shopping assistant and a hybrid recommendation engine.  
+All AI responses are persisted in a relational database, which enables auditing, replay, and helps reduce hallucinations.  
+The service can query NVIDIA’s Nemotron 3 Ultra, a local model, or a mock provider, and will automatically fall back if a provider is unavailable.
 
 ---
 
@@ -24,11 +24,11 @@ The service can use NVIDIA’s Nemotron 3 Ultra, a local model, or a mock 
 | Feature | Description |
 |---------|-------------|
 | Conversational Assistant | Multi‑turn chat with memory and tool‑based reasoning powered by NVIDIA Nemotron 3 Ultra. |
-| Recommendation Engine | Integrates user preferences, browsing history, content relevance, ratings, and popularity to surface relevant products. |
+| Recommendation Engine | Leverages user preferences, browsing history, content relevance, ratings, and popularity to surface relevant products. |
 | Sentiment & Topic Mining | Extracts actionable insights from user reviews. |
-| AI‑Generated Comparisons | Generates side‑by‑side spec tables with an AI verdict banner. |
+| AI‑Generated Comparisons | Produces side‑by‑side spec tables with an AI verdict banner. |
 | Procedural UI | Neon doodles, magnetic cursor, click‑burst particles, glass‑morphic cards. |
-| Geolocation | Displays IP‑based city/state/country on a responsive Leaflet map. |
+| Geolocation | Shows IP‑based city/state/country on a responsive Leaflet map. |
 | Transactional Email | Brevo integration for OTPs, receipts, and account actions. |
 | Zero‑Hallucination Guardrails | All data is fetched through secure service calls; no raw SQL is exposed. |
 
@@ -49,7 +49,7 @@ The service can use NVIDIA’s Nemotron 3 Ultra, a local model, or a mock 
                                            ▼
                                    ┌─────────────────────────┐
                                    │  Tool Services          │
-                                   │  (lookup, profiling,  │
+                                   │  (lookup, profiling,   │
                                    │   comparison)          │
                                    └───────┬─────────────────┘
                                             │
@@ -62,10 +62,12 @@ The service can use NVIDIA’s Nemotron 3 Ultra, a local model, or a mock 
 
 ---
 
-## Quick Start
+## Getting Started
+
+### From Source
 
 ```bash
-# Install dependencies and run from source
+# Run the application with Maven Wrapper
 # Windows
 ./mvnw.cmd spring-boot:run
 
@@ -73,14 +75,15 @@ The service can use NVIDIA’s Nemotron 3 Ultra, a local model, or a mock 
 ./mvnw spring-boot:run
 ```
 
-> The application runs on port **8080** by default.  
-> - Storefront: <http://localhost:8080>  
-> - H2 Console: <http://localhost:8080/h2-console>
+The app starts on **port 8080** by default.
 
-### Docker
+*   Storefront: <http://localhost:8080>
+*   H2 Console: <http://localhost:8080/h2-console>
+
+### Using Docker
 
 ```bash
-# Build a Docker image
+# Build the image
 docker build -t omnimart-ai:latest .
 
 # Run the container
@@ -91,25 +94,25 @@ docker run -p 8080:8080 -e AI_PROVIDER=nvidia omnimart-ai:latest
 
 ## Deploying to Render
 
-1. Push the repository to GitHub.  
+1. Push this repository to GitHub.  
 2. In Render, create a new Web Service → *From GitHub* → select this repo.  
-3. Render will pick up the `Dockerfile`.  
-4. Set the following environment variables (see below).  
+3. Render will detect the `Dockerfile`.  
+4. Set the required environment variables (see the table below).  
 5. Render exposes the service on `${PORT}`; the app automatically listens on that port.
 
 ---
 
 ## Environment Variables
 
-| Variable           | Default                                      | Description |
-|--------------------|----------------------------------------------|------------|
-| `PORT`             | `8080`                                       | HTTP port (overridden by Render). |
-| `AI_PROVIDER`      | `nvidia`                                     | `nvidia`, `local`, or `mock`. |
-| `NVIDIA_API_KEYS`  | **required**                                  | Comma‑separated NVIDIA API keys. |
-| `NVIDIA_MODEL`     | `nvidia/nemotron-3-ultra-550b-a55b`          | Identifier for the NVIDIA model. |
-| `BREVO_API_KEY`    | **required**                                  | Brevo transactional email key. |
-| `BREVO_SENDER_EMAIL` | `support@omnimart-ai.com`                 | Verified sender address. |
-| `BREVO_SENDER_NAME`   | `OmniMart AI`                                 | Sender name used in outgoing emails. |
+| Variable            | Default | Description |
+|----------------------|---------|-------------|
+| `PORT`               | `8080`  | HTTP port (overridden by Render). |
+| `AI_PROVIDER`        | `nvidia` | `nvidia`, `local`, or `mock`. |
+| `NVIDIA_API_KEYS`    | **required** | Comma‑separated NVIDIA API keys. |
+| `NVIDIA_MODEL`       | `nvidia/nemotron-3-ultra-550b-a55b` | Identifier for the NVIDIA model. |
+| `BREVO_API_KEY`      | **required** | Brevo transactional email key. |
+| `BREVO_SENDER_EMAIL` | `support@omnimart-ai.com` | Verified sender address. |
+| `BREVO_SENDER_NAME`  | `OmniMart AI` | Sender name used in outgoing emails. |
 
 ---
 
@@ -119,22 +122,22 @@ docker run -p 8080:8080 -e AI_PROVIDER=nvidia omnimart-ai:latest
 
 | Role     | Email                | Password       | Access |
 |----------|----------------------|----------------|--------|
-| Customer | `user@omnimart.com`  | `password123`  | Storefront, cart, AI assistant |
+| Customer | `user@omnimart.com`  | `password123` | Storefront, cart, AI assistant |
 | Admin    | `admin@omnimart.com` | `admin123`     | Analytics, sentiment charts, admin AI Q&A |
 
 ---
 
 ## Changelog
 
-- **v1.0.0 – 2026‑08‑20**  
-  * Initial release: Spring Boot 3, NVIDIA Nemotron 3 Ultra, hybrid recommendation engine, zero‑hallucination guardrails, procedural UI toolkit, Docker multi‑stage build, Render blueprint, demo accounts.
+* **v1.0.0 – 2026‑08‑20**  
+  Initial release: Spring Boot 3, NVIDIA Nemotron 3 Ultra, hybrid recommendation engine, zero‑hallucination guardrails, procedural UI toolkit, Docker multi‑stage build, Render blueprint, demo accounts.
 
 ---
 
 ## Contributing
 
 Pull requests are welcome.  
-Please open an issue before submitting large changes.  
+Please open an issue before submitting a large change.  
 See the [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for guidelines.
 
 ---
