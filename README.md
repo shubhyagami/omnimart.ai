@@ -13,21 +13,18 @@
 
 ## 📚 Overview
 
-OmniMart AI is a lightweight **Spring Boot 3** microservice that powers a conversational shopping assistant.  
-Key capabilities:
+OmniMart AI is a lightweight **Spring Boot 3** microservice that powers a conversational shopping assistant. It bundles:
 
-| ✔ | Feature |
-|---|---------|
-| 🤖 | Multi‑turn chat with long‑term context and tool calls |
-| 🔗 | Hybrid recommendation engine (behaviour, content, ratings, popularity) |
-| 📊 | Sentiment & topic mining from product reviews |
-| ⚔️ | AI‑generated side‑by‑side spec comparisons |
-| 🎨 | Procedural UI with neon doodles, magnetic cursor, glass‑morphic cards |
-| 🌍 | IP‑based geolocation displayed on a Leaflet map |
-| ✉️ | Brevo transactional email (OTPs, receipts) |
-| 🛡️ | Zero‑hallucination guardrails – all data fetched through secure service calls |
+- Multi‑turn chat with long‑term context and optional tool calls  
+- Hybrid recommendation engine (behaviour, content, ratings, popularity)  
+- Sentiment and topic mining from product reviews  
+- AI‑generated side‑by‑side specification comparisons  
+- Procedural UI features (neon doodles, magnetic cursor, glass‑morphic cards)  
+- IP‑based geolocation on a Leaflet map  
+- Brevo transactional e‑mail (OTPs, receipts)  
+- Zero‑hallucination guardrails – all data is fetched through secure service calls
 
-It supports three AI providers (NVIDIA Nemotron 3 Ultra, a local checkpoint, or a mock implementation) and stores every interaction in a relational database for audit and replayability.
+The service supports three AI backends: NVIDIA Nemotron 3 Ultra, a local checkpoint, or a mock implementation. Every interaction is persisted in a relational database for audit and replay.
 
 ---
 
@@ -41,30 +38,37 @@ It supports three AI providers (NVIDIA Nemotron 3 Ultra, a local checkpoint, o
 ./mvnw.cmd spring-boot:run
 ```
 
-The service listens on **port 8080**.  
-Open <http://localhost:8080> or hit the REST endpoints.
+The application listens on **port 8080**. Open <http://localhost:8080> or try the REST endpoints.
 
-> 💡 Use a database other than the default H2 in‑memory?  
-> Set `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME`, and `SPRING_DATASOURCE_PASSWORD` before running.
+> 📌 *Database.*  
+> If you want to use a database other than the default in‑memory H2, set:
+> ```
+> SPRING_DATASOURCE_URL=
+> SPRING_DATASOURCE_USERNAME=
+> SPRING_DATASOURCE_PASSWORD=
+> ```
+> before running.
 
 ---
 
-## 🎯 Environment Variables
+## ⚙️ Configuration
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `PORT` | `8080` | HTTP listening port (e.g., Render may override) |
-| `AI_PROVIDER` | `nvidia` | `nvidia`, `local`, or `mock` |
-| `NVIDIA_API_KEYS` | *required* | Comma‑separated NVIDIA API keys |
-| `NVIDIA_MODEL` | `nvidia/nemotron-3-ultra-550b-a55b` | Model identifier |
-| `BREVO_API_KEY` | *required* | Brevo transactional‑email key |
-| `BREVO_SENDER_EMAIL` | `support@omnimart-ai.com` | Sender email address |
-| `BREVO_SENDER_NAME` | `OmniMart AI` | Sender display name |
-| `SPRING_DATASOURCE_URL` | `jdbc:h2:mem:omnimart;DB_CLOSE_ON_EXIT=FALSE` | JDBC URL |
+The application reads its settings from `src/main/resources/application.yml`. Environment variables override the YAML values:
+
+| Variable                | Default | Description |
+|------------------------ |---------|-------------|
+| `PORT`                  | `8080`  | HTTP listening port (useful on Render, Fly.io, etc.) |
+| `AI_PROVIDER`           | `nvidia`| `nvidia`, `local`, or `mock` |
+| `NVIDIA_API_KEYS`       | *required* | Comma‑separated NVIDIA API keys |
+| `NVIDIA_MODEL`          | `nvidia/nemotron-3-ultra-550b-a55b` | Model identifier |
+| `BREVO_API_KEY`          | *required* | Brevo transactional‑email key |
+| `BREVO_SENDER_EMAIL`     | `support@omnimart-ai.com` | Sender e‑mail |
+| `BREVO_SENDER_NAME`      | `OmniMart AI` | Sender display name |
+| `SPRING_DATASOURCE_URL`  | `jdbc:h2:mem:omnimart;DB_CLOSE_ON_EXIT=FALSE` | JDBC URL |
 | `SPRING_DATASOURCE_USERNAME` | `sa` | DB username |
 | `SPRING_DATASOURCE_PASSWORD` | `""` | DB password |
 
-The application loads `src/main/resources/application.yml`. Copy it to override defaults when needed.
+Copy the YAML file to override any defaults locally.
 
 ---
 
@@ -76,19 +80,19 @@ The application loads `src/main/resources/application.yml`. Copy it to override 
 └──────────┬───────────┘
            ▼
 ┌──────────────────────┐
-│  Controller Layer     │  (Spring MVC)
+│  Controller Layer   │  (Spring MVC)
 └──────────┬───────────┘
            ▼
 ┌──────────────────────┐
-│  AI Orchestrator     │  (memory & tool selector)
+│  AI Orchestrator    │  (memory + tool selector)
 └──────────┬───────────┘
            ▼
 ┌──────────────────────┐
-│  Tool Services        │  (lookup, profiling, comparison)
+│  Tool Services       │  (lookup, profiling, comparison)
 └──────────┬───────────┘
            ▼
 ┌──────────────────────┐
-│  Data Layer           │  (H2 / MySQL)
+│  Data Layer          │  (H2 / MySQL)
 └──────────────────────┘
 ```
 
@@ -108,14 +112,16 @@ docker run -p 8080:8080 \
   omnimart-ai:latest
 ```
 
-The Dockerfile is multi‑stage and produces an image of ~80 MB.
+The multi‑stage Dockerfile produces an image of ~80 MB.
 
 ---
 
-## 🌐 Deploy to Render (or any container platform)
+## 🌐 Deploy
 
-1. Push this repo to GitHub.  
-2. In Render, create a new *Web Service* → *From GitHub* → select this repo.  
+### Render (or any container platform)
+
+1. Push the repo to GitHub.  
+2. In Render, create a **Web Service** → **From GitHub** → select this repo.  
 3. Render will detect the `Dockerfile`.  
 4. Add the required environment variables (`AI_PROVIDER`, `NVIDIA_API_KEYS`, `BREVO_API_KEY`).  
 5. Render exposes the app on `${PORT}` automatically.
@@ -124,12 +130,12 @@ The Dockerfile is multi‑stage and produces an image of ~80 MB.
 
 ## 👤 Demo Accounts
 
-| Role | Email | Password | Permissions |
-|------|-------|----------|-------------|
-| Customer | `user@omnimart.com` | `password123` | Storefront, cart, AI assistant |
-| Admin | `admin@omnimart.com` | `admin123` | Analytics, sentiment charts, admin Q&A |
+| Role      | Email                | Password | Permissions |
+|-----------|----------------------|-----------|--------------|
+| Customer  | `user@omnimart.com`  | `password123` | Storefront, cart, AI assistant |
+| Admin     | `admin@omnimart.com` | `admin123`   | Analytics, sentiment charts, admin Q&A |
 
-*These accounts are for demo purposes only.*
+*These accounts are for demonstration only.*
 
 ---
 
@@ -139,23 +145,21 @@ The Dockerfile is multi‑stage and produces an image of ~80 MB.
 ./mvnw test
 ```
 
-Unit tests cover the orchestrator logic and the AI tool abstraction.
+Unit tests cover orchestrator logic and the AI tool abstraction.
 
 ---
 
 ## 🤝 Contributing
 
-Pull requests are welcome.  
-For major changes, please open an issue first to discuss the approach.  
-See the [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for community guidelines.
+Pull requests are welcome. For major changes, please open an issue first to discuss the approach. See the [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for guidelines.
 
 ---
 
 ## 📜 Changelog
 
-| Version | Date | Highlights |
-|---------|-------|-------------|
-| **v1.0.0** | 2026‑08‑20 | Initial stable release – Spring Boot 3, NVIDIA Nemotron 3 Ultra, hybrid recommendation engine, zero‑hallucination guardrails, procedural UI, Docker build, Render guide, demo accounts |
+| Version | Date       | Highlights |
+|---------|------------|------------|
+| **v1.0.0** | 2026‑08‑20 | Initial stable release – Spring Boot 3, NVIDIA Nemotron 3 Ultra, hybrid recommendation engine, zero‑hallucination guardrails, procedural UI, Docker build, Render deployment guide, demo accounts |
 
 ---
 
